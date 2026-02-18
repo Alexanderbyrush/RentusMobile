@@ -1,386 +1,150 @@
 package com.example.rentusmobile.presentation.screens.auth
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Badge
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rentusmobile.R
+import com.example.rentusmobile.presentation.components.AuthBackground
+import com.example.rentusmobile.presentation.components.AuthButton
+import com.example.rentusmobile.presentation.components.AuthInputField
+import com.example.rentusmobile.presentation.components.AuthModal
+import com.example.rentusmobile.presentation.components.AuthTabRow
+import com.example.rentusmobile.presentation.components.DividerWithText
+import com.example.rentusmobile.presentation.components.SocialButton
+import com.example.rentusmobile.viewModel.RegisterViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     onNavigateToLogin: () -> Unit,
-    onNavigateToHome: () -> Unit,
-    onBackPressed: () -> Unit
+    onNavigateBack: () -> Unit,
+    onRegisterSuccess: () -> Unit,
+    onTermsClick: () -> Unit,
+    viewModel: RegisterViewModel = viewModel()
 ) {
-    // Estados para los campos del formulario
-    var name by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
-    var idDocumento by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var passwordConfirmation by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
+    val state = viewModel.state
 
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        // Panel Izquierdo (55%) - IGUAL QUE LOGIN
-        Box(
-            modifier = Modifier
-                .weight(0.55f)
-                .background(Color(0x99DED5C4))
-                .graphicsLayer { alpha = 0.99f }
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 100.dp)
-                    .padding(vertical = 48.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                // Contenido superior (cambiado texto)
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    // Logo
-                    Row(
-                        verticalAlignment = Alignment.Bottom,
-                        modifier = Modifier.offset(x = (-8).dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.logodark),
-                            contentDescription = "Logo RentUs",
-                            modifier = Modifier
-                                .size(48.dp)
-                                .offset(y = 6.dp)
-                        )
-                        Text(
-                            text = "Rent",
-                            fontSize = 33.sp,
-                            fontWeight = FontWeight.Black,
-                            color = Color.Black
-                        )
-                        Text(
-                            text = "Us",
-                            fontSize = 33.sp,
-                            fontWeight = FontWeight.Black,
-                            color = Color(0xFF4D2F24)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = "¡Únete a Rent Us!",
-                        fontSize = 20.sp,
-                        color = Color(0xFF432D26),
-                        fontWeight = FontWeight.Medium
-                    )
-
-                    Text(
-                        text = "Crea tu cuenta y empieza a construir el camino hacia tu próximo hogar.",
-                        fontSize = 16.sp,
-                        color = Color.Gray,
-                        modifier = Modifier
-                            .padding(top = 8.dp)
-                            .widthIn(max = 400.dp),
-                        lineHeight = 20.sp
-                    )
-                }
-
-                // Imagen de casa (IGUAL)
-                Image(
-                    painter = painterResource(id = R.drawable.casa),
-                    contentDescription = "Casa",
-                    modifier = Modifier
-                        .fillMaxWidth(1.1f)
-                        .offset(x = (-160).dp)
-                        .graphicsLayer {
-                            scaleX = 1.5f
-                            scaleY = 1.5f
-                        }
-                        .drawWithCache {
-                            onDrawWithContent {
-                                drawContent()
-                                drawRect(
-                                    brush = Brush.horizontalGradient(
-                                        0f to Color.Transparent,
-                                        0.85f to Color.Black
-                                    ),
-                                    blendMode = BlendMode.DstIn
-                                )
-                            }
-                        },
-                    contentScale = ContentScale.FillWidth
-                )
-            }
-        }
-
-        // Panel Derecho (45%) - CON SCROLL POR LOS MUCHOS CAMPOS
+    AuthBackground {
         Column(
             modifier = Modifier
-                .weight(0.45f)
-                .fillMaxHeight()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 48.dp, vertical = 32.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
+                .padding(20.dp)
         ) {
-            Text(
-                text = "Registrarse",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
+            Image(
+                painter = painterResource(id = R.drawable.logodark),
+                contentDescription = "RentUs",
+                modifier = Modifier.size(120.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Botones de navegación (con slider en Register)
-            Box(
-                modifier = Modifier
-                    .width(320.dp)
-                    .height(48.dp)
-                    .background(
-                        color = Color(0xFF4D2F24),
-                        shape = RoundedCornerShape(50)
-                    )
-                    .padding(4.dp)
-            ) {
-                // Slider background - AHORA POSICIONADO EN REGISTER
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .padding(4.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(100.dp)
-                            .offset(x = 110.dp) // (320/3 + 4) aprox
-                            .background(
-                                color = Color(0xFFDED5C4),
-                                shape = RoundedCornerShape(50)
-                            )
-                    )
-                }
-
-                // Botones
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Iniciar Sesión",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.clickable { onNavigateToLogin() }
-                    )
-                    Text(
-                        text = "Registrarse",
-                        color = Color(0xFF4D2F24),
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.clickable { /* Ya estamos en register */ }
-                    )
-                    Text(
-                        text = "Volver",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.clickable { onBackPressed() }
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Mensaje de error
-            if (errorMessage != null) {
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFF8D7DA)
-                    ),
-                    shape = RoundedCornerShape(4.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = errorMessage!!,
-                        color = Color(0xFF842029),
-                        fontSize = 14.sp,
-                        modifier = Modifier.padding(10.dp)
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            // Formulario con 7 campos
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // Nombre completo
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    placeholder = { Text("Nombre completo") },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    singleLine = true
-                )
-
-                // Teléfono
-                OutlinedTextField(
-                    value = phone,
-                    onValueChange = { phone = it },
-                    placeholder = { Text("Teléfono") },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
-                )
-
-                // Correo electrónico
-                OutlinedTextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    placeholder = { Text("Correo electrónico") },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
-                )
-
-                // Dirección
-                OutlinedTextField(
-                    value = address,
-                    onValueChange = { address = it },
-                    placeholder = { Text("Dirección") },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    singleLine = true
-                )
-
-                // Documento
-                OutlinedTextField(
-                    value = idDocumento,
-                    onValueChange = { idDocumento = it },
-                    placeholder = { Text("Documento") },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    singleLine = true
-                )
-
-                // Contraseña
-                OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    placeholder = { Text("Contraseña") },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-                )
-
-                // Confirmar contraseña
-                OutlinedTextField(
-                    value = passwordConfirmation,
-                    onValueChange = { passwordConfirmation = it },
-                    placeholder = { Text("Confirmar contraseña") },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-                )
-
-                // Botón Crear Cuenta
-                Button(
-                    onClick = {
-                        // Validación básica (solo visual por ahora)
-                        if (password == passwordConfirmation &&
-                            name.isNotBlank() && email.isNotBlank()) {
-                            errorMessage = null
-                            onNavigateToHome()
-                        } else {
-                            errorMessage = "Verifica los datos e inténtalo de nuevo."
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                AuthModal(modifier = Modifier.fillMaxWidth(0.92f)) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier.verticalScroll(rememberScrollState())
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            IconButton(onClick = onNavigateBack) {
+                                Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
+                            }
+                            Text("Volver", color = Color(0xFF6B7280))
                         }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF432D26)
-                    )
-                ) {
-                    Text("Crear Cuenta", fontWeight = FontWeight.Bold)
+
+                        AuthTabRow(
+                            isLoginSelected = false,
+                            onLoginClick = onNavigateToLogin,
+                            onRegisterClick = {}
+                        )
+
+                        Text("Crea tu cuenta", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1F2937))
+                        Text("Completa tus datos para comenzar", color = Color(0xFF6B7280))
+
+                        AuthInputField(state.name, viewModel::onNameChange, "Nombre completo", Icons.Default.Person, error = state.validationErrors["name"])
+                        AuthInputField(state.email, viewModel::onEmailChange, "Email", Icons.Default.Email, error = state.validationErrors["email"])
+                        AuthInputField(state.phone, viewModel::onPhoneChange, "Teléfono", Icons.Default.Phone, error = state.validationErrors["phone"])
+                        AuthInputField(state.idDocument, viewModel::onIdDocumentChange, "Documento de identidad", Icons.Default.Badge, error = state.validationErrors["idDocument"])
+                        AuthInputField(state.address, viewModel::onAddressChange, "Dirección", Icons.Default.LocationOn, error = state.validationErrors["address"])
+                        AuthInputField(
+                            value = state.password,
+                            onValueChange = viewModel::onPasswordChange,
+                            label = "Contraseña",
+                            leadingIcon = Icons.Default.Lock,
+                            isPassword = true,
+                            isPasswordVisible = state.isPasswordVisible,
+                            onTogglePasswordVisibility = viewModel::onTogglePasswordVisibility,
+                            visualTransformation = if (state.isPasswordVisible) androidx.compose.ui.text.input.VisualTransformation.None else PasswordVisualTransformation(),
+                            error = state.validationErrors["password"]
+                        )
+
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                            Checkbox(checked = state.acceptTerms, onCheckedChange = viewModel::onAcceptTermsChange)
+                            val termsText = buildAnnotatedString {
+                                append("Acepto los ")
+                                withStyle(style = SpanStyle(color = Color(0xFF2563EB), fontWeight = FontWeight.Medium)) {
+                                    append("términos y condiciones")
+                                }
+                            }
+                            ClickableText(text = termsText, onClick = {
+                                viewModel.onTermsClick()
+                                onTermsClick()
+                            })
+                        }
+                        state.validationErrors["terms"]?.let { Text(it, color = Color(0xFFEF4444), fontSize = 12.sp) }
+                        state.errorMessage?.let { Text(it, color = Color(0xFFEF4444)) }
+
+                        AuthButton(
+                            text = "Crear Cuenta",
+                            enabled = state.isFormValid,
+                            isLoading = state.isLoading,
+                            onClick = { viewModel.onRegisterClick(onRegisterSuccess) }
+                        )
+
+                        DividerWithText("O regístrate con")
+                        SocialButton(text = "Registrarse con Google", onClick = viewModel::onGoogleRegisterClick)
+
+                        val footer = buildAnnotatedString {
+                            append("¿Ya tienes una cuenta? ")
+                            withStyle(style = SpanStyle(color = Color(0xFF2563EB), fontWeight = FontWeight.Medium)) {
+                                append("Inicia sesión aquí")
+                            }
+                        }
+                        ClickableText(text = footer, onClick = { onNavigateToLogin() })
+                    }
                 }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "O continúa con",
-                color = Color(0xFF666666),
-                fontSize = 14.sp
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Redes sociales
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(24.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_apple),
-                    contentDescription = "Apple",
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clickable { /* TODO */ }
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.ic_facebook),
-                    contentDescription = "Facebook",
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clickable { /* TODO */ }
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.ic_google),
-                    contentDescription = "Google",
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clickable { /* TODO */ }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
