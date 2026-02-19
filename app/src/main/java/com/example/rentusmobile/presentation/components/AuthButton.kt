@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.rentusmobile.presentation.theme.DotInactive
 import com.example.rentusmobile.presentation.theme.Primary
 import com.example.rentusmobile.presentation.theme.White
 
@@ -35,7 +34,7 @@ fun AuthButton(
             .height(52.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Primary,
-            disabledContainerColor = DotInactive,
+            disabledContainerColor = Primary.copy(alpha = 0.5f),
             contentColor = White,
             disabledContentColor = White
         )

@@ -5,11 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
@@ -23,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -40,7 +39,6 @@ import com.example.rentusmobile.presentation.components.AuthModal
 import com.example.rentusmobile.presentation.components.AuthTabRow
 import com.example.rentusmobile.presentation.components.BrandLogo
 import com.example.rentusmobile.presentation.components.DividerWithText
-import com.example.rentusmobile.presentation.components.DynamicMessageSection
 import com.example.rentusmobile.presentation.components.SocialButton
 import com.example.rentusmobile.presentation.theme.Primary
 import com.example.rentusmobile.presentation.theme.TextPrimary
@@ -65,26 +63,17 @@ fun LoginScreen(
                     .padding(start = 28.dp, top = 28.dp)
             )
 
-            DynamicMessageSection(
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .fillMaxWidth(0.5f)
-                    .padding(start = 36.dp)
-            )
-
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 AuthModal(
                     modifier = Modifier
-                        .fillMaxWidth(0.42f)
-                        .widthIn(min = 360.dp, max = 480.dp)
+                        .fillMaxWidth(0.92f)
                 ) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier
-                            .fillMaxHeight(0.9f)
                             .verticalScroll(rememberScrollState())
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -125,7 +114,7 @@ fun LoginScreen(
 
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
-                                Checkbox(checked = state.rememberMe, onCheckedChange = viewModel::onRememberMeChange)
+                                Checkbox(checked = state.rememberMe, onCheckedChange = viewModel::onRememberMeChange, modifier = Modifier.scale(0.82f))
                                 Text("Recordarme", color = TextPrimary)
                             }
                             Text(
