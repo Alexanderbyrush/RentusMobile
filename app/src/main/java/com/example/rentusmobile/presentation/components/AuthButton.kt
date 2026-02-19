@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.rentusmobile.presentation.theme.Primary
+import com.example.rentusmobile.presentation.theme.PrimaryDark
 import com.example.rentusmobile.presentation.theme.White
 
 @Composable
@@ -34,7 +35,7 @@ fun AuthButton(
             .height(52.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Primary,
-            disabledContainerColor = Primary.copy(alpha = 0.5f),
+            disabledContainerColor = PrimaryDark.copy(alpha = 0.45f),
             contentColor = White,
             disabledContentColor = White
         )
@@ -43,7 +44,7 @@ fun AuthButton(
             CircularProgressIndicator(modifier = Modifier.size(18.dp), color = White, strokeWidth = 2.dp)
         } else {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = text, fontWeight = FontWeight.Medium)
+                Text(text = text, fontWeight = FontWeight.Bold)
                 Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
             }
         }

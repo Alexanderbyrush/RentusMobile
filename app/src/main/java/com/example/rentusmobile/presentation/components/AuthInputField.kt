@@ -15,8 +15,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.VisualTransformation
 import com.example.rentusmobile.presentation.theme.Border
 import com.example.rentusmobile.presentation.theme.Error
+import com.example.rentusmobile.presentation.theme.InputBg
 import com.example.rentusmobile.presentation.theme.Primary
 import com.example.rentusmobile.presentation.theme.TextSecondary
+import com.example.rentusmobile.presentation.theme.White
 
 @Composable
 fun AuthInputField(
@@ -59,7 +61,10 @@ fun AuthInputField(
             focusedBorderColor = Primary,
             unfocusedBorderColor = Border,
             errorBorderColor = Error,
-            cursorColor = Primary
+            cursorColor = Primary,
+            focusedContainerColor = White,
+            unfocusedContainerColor = InputBg,
+            errorContainerColor = Error.copy(alpha = 0.08f)
         )
     )
 }

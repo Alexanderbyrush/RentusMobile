@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rentusmobile.R
-import com.example.rentusmobile.presentation.theme.TextPrimary
+import com.example.rentusmobile.presentation.theme.Primary
 
 @Composable
 fun BrandLogo(modifier: Modifier = Modifier) {
@@ -25,9 +25,9 @@ fun BrandLogo(modifier: Modifier = Modifier) {
         Image(
             painter = painterResource(id = R.drawable.logodark),
             contentDescription = "RentUs logo",
-            modifier = Modifier.size(38.dp)
+            modifier = Modifier.size(40.dp)
         )
-        Text(text = "Rent", fontWeight = FontWeight.ExtraBold, fontSize = 30.sp, color = TextPrimary)
-        Text(text = "Us", fontWeight = FontWeight.ExtraBold, fontSize = 30.sp, color = TextPrimary)
+        Text(text = "Rent", fontWeight = FontWeight.ExtraBold, fontSize = 30.sp, color = androidx.compose.ui.graphics.Color.Black)
+        Text(text = "Us", fontWeight = FontWeight.ExtraBold, fontSize = 30.sp, color = Primary)
     }
 }
