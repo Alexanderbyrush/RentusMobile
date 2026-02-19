@@ -64,7 +64,11 @@ private data class DemoProperty(
 )
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onNavigateHome: () -> Unit = {},
+    onNavigateProperties: () -> Unit = {},
+    onNavigateAbout: () -> Unit = {}
+) {
     val properties = remember {
         listOf(
             DemoProperty("Apartamento Premium", "Bogotá", "$2.500.000", "95m²", "3", "2", "Disponible"),
@@ -93,7 +97,13 @@ fun HomeScreen() {
             Spacer(modifier = Modifier.height(24.dp))
         }
 
-        HomeNavbar(modifier = Modifier.align(Alignment.BottomCenter))
+        HomeNavbar(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            selectedTab = "Inicio",
+            onNavigateHome = onNavigateHome,
+            onNavigateProperties = onNavigateProperties,
+            onNavigateAbout = onNavigateAbout
+        )
     }
 }
 

@@ -29,10 +29,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -43,14 +43,19 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeNavbar(modifier: Modifier = Modifier) {
-    var active by remember { mutableStateOf("Inicio") }
+fun HomeNavbar(
+    modifier: Modifier = Modifier,
+    selectedTab: String = "Inicio",
+    onNavigateHome: () -> Unit = {},
+    onNavigateProperties: () -> Unit = {},
+    onNavigateAbout: () -> Unit = {}
+) {
     var openMenu by remember { mutableStateOf(false) }
 
     val quickLinks = listOf(
-        Triple("Inicio", Icons.Default.Home, "home"),
-        Triple("Propiedades", Icons.Default.Apartment, "properties"),
-        Triple("Nosotros", Icons.Default.Person, "about")
+        Triple("Inicio", Icons.Default.Home, onNavigateHome),
+        Triple("Propiedades", Icons.Default.Apartment, onNavigateProperties),
+        Triple("Nosotros", Icons.Default.Person, onNavigateAbout)
     )
 
     val menuItems = listOf(
@@ -79,7 +84,7 @@ fun HomeNavbar(modifier: Modifier = Modifier) {
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             quickLinks.forEach { item ->
-                val isActive = active == item.first
+                val isActive = selectedTab == item.first
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
@@ -88,7 +93,7 @@ fun HomeNavbar(modifier: Modifier = Modifier) {
                             else Brush.linearGradient(listOf(Color.Transparent, Color.Transparent)),
                             RoundedCornerShape(12.dp)
                         )
-                        .clickable { active = item.first }
+                        .clickable { item.third.invoke() }
                         .padding(horizontal = 10.dp, vertical = 8.dp)
                 ) {
                     Icon(item.second, contentDescription = item.first, tint = Color.White, modifier = Modifier.size(18.dp))
