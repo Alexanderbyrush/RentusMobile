@@ -21,15 +21,16 @@ fun HomeScreen() {
             .fillMaxSize()
             .background(Color(0xFFF7F8FA))
     ) {
-        HomeNavbar(modifier = Modifier.align(Alignment.TopCenter))
         Text(
             text = "Home (vista temporal)",
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(top = 65.dp),
+                .padding(bottom = 80.dp),
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF2C3E50)
         )
+
+        HomeNavbar(modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
