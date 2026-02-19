@@ -6,10 +6,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.rentusmobile.presentation.screens.auth.LoginScreen
 import com.example.rentusmobile.presentation.screens.auth.RegisterScreen
+import com.example.rentusmobile.presentation.screens.home.HomeScreen
 
 sealed class Screen(val route: String) {
     data object Login : Screen("login")
     data object Register : Screen("register")
+    data object Home : Screen("home")
 }
 
 @Composable
@@ -24,7 +26,11 @@ fun NavGraph(
             LoginScreen(
                 onNavigateToRegister = { navController.navigate(Screen.Register.route) },
                 onNavigateBack = {},
-                onLoginSuccess = {},
+                onLoginSuccess = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                },
                 onForgotPassword = {}
             )
         }
@@ -33,9 +39,17 @@ fun NavGraph(
             RegisterScreen(
                 onNavigateToLogin = { navController.navigate(Screen.Login.route) },
                 onNavigateBack = { navController.popBackStack() },
-                onRegisterSuccess = {},
+                onRegisterSuccess = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                },
                 onTermsClick = {}
             )
+        }
+
+        composable(Screen.Home.route) {
+            HomeScreen()
         }
     }
 }

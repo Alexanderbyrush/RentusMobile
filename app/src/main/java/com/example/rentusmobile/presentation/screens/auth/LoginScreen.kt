@@ -120,6 +120,8 @@ fun LoginScreen(
                             Text(
                                 text = "¿Olvidaste tu contraseña?",
                                 color = Primary,
+                                fontSize = 12.sp,
+                                maxLines = 1,
                                 modifier = Modifier.clickable {
                                     viewModel.onForgotPasswordClick()
                                     onForgotPassword()
