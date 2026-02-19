@@ -14,9 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.rentusmobile.presentation.theme.Border
+import com.example.rentusmobile.presentation.theme.Primary
+import com.example.rentusmobile.presentation.theme.TextSecondary
+import com.example.rentusmobile.presentation.theme.White
 
 @Composable
 fun AuthTabRow(
@@ -30,7 +33,7 @@ fun AuthTabRow(
         modifier = Modifier
             .fillMaxWidth()
             .height(44.dp)
-            .background(Color(0xFFF3F4F6), RoundedCornerShape(12.dp))
+            .background(Border, RoundedCornerShape(12.dp))
             .padding(4.dp)
     ) {
         Box(
@@ -38,7 +41,7 @@ fun AuthTabRow(
                 .width(140.dp)
                 .height(36.dp)
                 .padding(start = indicatorOffset.value)
-                .background(Color.White, RoundedCornerShape(10.dp))
+                .background(Primary, RoundedCornerShape(10.dp))
         )
 
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -58,7 +61,7 @@ private fun TabItem(text: String, selected: Boolean, onClick: () -> Unit, modifi
     ) {
         Text(
             text = text,
-            color = if (selected) Color(0xFF1F2937) else Color(0xFF6B7280),
+            color = if (selected) White else TextSecondary,
             fontWeight = FontWeight.Medium
         )
     }

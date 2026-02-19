@@ -14,9 +14,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.rentusmobile.presentation.theme.DotInactive
+import com.example.rentusmobile.presentation.theme.Primary
+import com.example.rentusmobile.presentation.theme.White
 
 @Composable
 fun AuthButton(
@@ -32,14 +34,14 @@ fun AuthButton(
             .fillMaxWidth()
             .height(52.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF2563EB),
-            disabledContainerColor = Color(0xFF93C5FD),
-            contentColor = Color.White,
-            disabledContentColor = Color.White
+            containerColor = Primary,
+            disabledContainerColor = DotInactive,
+            contentColor = White,
+            disabledContentColor = White
         )
     ) {
         if (isLoading) {
-            CircularProgressIndicator(modifier = Modifier.size(18.dp), color = Color.White, strokeWidth = 2.dp)
+            CircularProgressIndicator(modifier = Modifier.size(18.dp), color = White, strokeWidth = 2.dp)
         } else {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = text, fontWeight = FontWeight.Medium)

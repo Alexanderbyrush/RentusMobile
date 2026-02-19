@@ -11,9 +11,12 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.VisualTransformation
+import com.example.rentusmobile.presentation.theme.Border
+import com.example.rentusmobile.presentation.theme.Error
+import com.example.rentusmobile.presentation.theme.Primary
+import com.example.rentusmobile.presentation.theme.TextSecondary
 
 @Composable
 fun AuthInputField(
@@ -32,15 +35,15 @@ fun AuthInputField(
         onValueChange = onValueChange,
         modifier = Modifier.fillMaxWidth(),
         singleLine = true,
-        label = { Text(label, color = Color(0xFF6B7280)) },
-        leadingIcon = { Icon(leadingIcon, contentDescription = label, tint = Color(0xFF6B7280)) },
+        label = { Text(label, color = TextSecondary) },
+        leadingIcon = { Icon(leadingIcon, contentDescription = label, tint = TextSecondary) },
         trailingIcon = if (isPassword) {
             {
                 IconButton(onClick = onTogglePasswordVisibility) {
                     Icon(
                         imageVector = if (isPasswordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                         contentDescription = "Toggle password",
-                        tint = Color(0xFF6B7280)
+                        tint = TextSecondary
                     )
                 }
             }
@@ -48,15 +51,15 @@ fun AuthInputField(
         isError = error != null,
         supportingText = {
             if (error != null) {
-                Text(text = error, color = Color(0xFFEF4444))
+                Text(text = error, color = Error)
             }
         },
         visualTransformation = visualTransformation,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color(0xFF2563EB),
-            unfocusedBorderColor = Color(0xFFE5E7EB),
-            errorBorderColor = Color(0xFFEF4444),
-            cursorColor = Color(0xFF2563EB)
+            focusedBorderColor = Primary,
+            unfocusedBorderColor = Border,
+            errorBorderColor = Error,
+            cursorColor = Primary
         )
     )
 }

@@ -1,15 +1,14 @@
 package com.example.rentusmobile.presentation.screens.auth
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
@@ -28,24 +27,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.rentusmobile.R
 import com.example.rentusmobile.presentation.components.AuthBackground
 import com.example.rentusmobile.presentation.components.AuthButton
 import com.example.rentusmobile.presentation.components.AuthInputField
 import com.example.rentusmobile.presentation.components.AuthModal
 import com.example.rentusmobile.presentation.components.AuthTabRow
+import com.example.rentusmobile.presentation.components.BrandLogo
 import com.example.rentusmobile.presentation.components.DividerWithText
+import com.example.rentusmobile.presentation.components.DynamicMessageSection
 import com.example.rentusmobile.presentation.components.SocialButton
+import com.example.rentusmobile.presentation.theme.Primary
+import com.example.rentusmobile.presentation.theme.TextPrimary
+import com.example.rentusmobile.presentation.theme.TextSecondary
 import com.example.rentusmobile.viewModel.RegisterViewModel
 
 @Composable
@@ -59,28 +61,40 @@ fun RegisterScreen(
     val state = viewModel.state
 
     AuthBackground {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.logodark),
-                contentDescription = "RentUs",
-                modifier = Modifier.size(120.dp)
+        Box(modifier = Modifier.fillMaxSize()) {
+            BrandLogo(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(start = 28.dp, top = 28.dp)
             )
 
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                AuthModal(modifier = Modifier.fillMaxWidth(0.92f)) {
+            DynamicMessageSection(
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .fillMaxWidth(0.5f)
+                    .padding(start = 36.dp)
+            )
+
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                AuthModal(
+                    modifier = Modifier
+                        .fillMaxWidth(0.42f)
+                        .widthIn(min = 360.dp, max = 480.dp)
+                ) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(10.dp),
-                        modifier = Modifier.verticalScroll(rememberScrollState())
+                        modifier = Modifier
+                            .fillMaxHeight(0.9f)
+                            .verticalScroll(rememberScrollState())
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             IconButton(onClick = onNavigateBack) {
-                                Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
+                                Icon(Icons.Default.ArrowBack, contentDescription = "Volver", tint = TextSecondary)
                             }
-                            Text("Volver", color = Color(0xFF6B7280))
+                            Text("Volver", color = TextSecondary)
                         }
 
                         AuthTabRow(
@@ -89,8 +103,8 @@ fun RegisterScreen(
                             onRegisterClick = {}
                         )
 
-                        Text("Crea tu cuenta", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFF1F2937))
-                        Text("Completa tus datos para comenzar", color = Color(0xFF6B7280))
+                        Text("Crea tu cuenta", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
+                        Text("Completa tus datos para comenzar", color = TextSecondary)
 
                         AuthInputField(state.name, viewModel::onNameChange, "Nombre completo", Icons.Default.Person, error = state.validationErrors["name"])
                         AuthInputField(state.email, viewModel::onEmailChange, "Email", Icons.Default.Email, error = state.validationErrors["email"])
@@ -105,7 +119,7 @@ fun RegisterScreen(
                             isPassword = true,
                             isPasswordVisible = state.isPasswordVisible,
                             onTogglePasswordVisibility = viewModel::onTogglePasswordVisibility,
-                            visualTransformation = if (state.isPasswordVisible) androidx.compose.ui.text.input.VisualTransformation.None else PasswordVisualTransformation(),
+                            visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                             error = state.validationErrors["password"]
                         )
 
@@ -113,7 +127,7 @@ fun RegisterScreen(
                             Checkbox(checked = state.acceptTerms, onCheckedChange = viewModel::onAcceptTermsChange)
                             val termsText = buildAnnotatedString {
                                 append("Acepto los ")
-                                withStyle(style = SpanStyle(color = Color(0xFF2563EB), fontWeight = FontWeight.Medium)) {
+                                withStyle(style = SpanStyle(color = Primary, fontWeight = FontWeight.Medium)) {
                                     append("términos y condiciones")
                                 }
                             }
@@ -122,8 +136,8 @@ fun RegisterScreen(
                                 onTermsClick()
                             })
                         }
-                        state.validationErrors["terms"]?.let { Text(it, color = Color(0xFFEF4444), fontSize = 12.sp) }
-                        state.errorMessage?.let { Text(it, color = Color(0xFFEF4444)) }
+                        state.validationErrors["terms"]?.let { Text(it, color = com.example.rentusmobile.presentation.theme.Error, fontSize = 12.sp) }
+                        state.errorMessage?.let { Text(it, color = com.example.rentusmobile.presentation.theme.Error) }
 
                         AuthButton(
                             text = "Crear Cuenta",
@@ -137,7 +151,8 @@ fun RegisterScreen(
 
                         val footer = buildAnnotatedString {
                             append("¿Ya tienes una cuenta? ")
-                            withStyle(style = SpanStyle(color = Color(0xFF2563EB), fontWeight = FontWeight.Medium)) {
+                            addStyle(SpanStyle(color = TextSecondary), 0, length)
+                            withStyle(style = SpanStyle(color = Primary, fontWeight = FontWeight.Medium)) {
                                 append("Inicia sesión aquí")
                             }
                         }
