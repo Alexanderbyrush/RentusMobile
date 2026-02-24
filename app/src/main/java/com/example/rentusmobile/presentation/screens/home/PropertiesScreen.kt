@@ -1,9 +1,16 @@
 package com.example.rentusmobile.presentation.screens.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,10 +18,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -23,6 +31,7 @@ import androidx.compose.material.icons.filled.Bathtub
 import androidx.compose.material.icons.filled.Bed
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.HourglassBottom
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AssistChip
@@ -31,13 +40,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -46,19 +54,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.width
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.res.painterResource
 import com.example.rentusmobile.R
+import com.example.rentusmobile.presentation.animation.ShimmerBlock
 import com.example.rentusmobile.presentation.components.HomeNavbar
+import kotlinx.coroutines.delay
 
 private data class PropertyCardItem(
     val title: String,
@@ -70,12 +78,7 @@ private data class PropertyCardItem(
     val status: String
 )
 
-private enum class PropertiesUiState {
-    Loading,
-    Error,
-    Empty,
-    Success
-}
+private enum class PropertiesUiState { Loading, Error, Empty, Success }
 
 @Composable
 fun PropertiesScreen(
@@ -101,6 +104,13 @@ fun PropertiesScreen(
         PropertyCardItem("Loft Industrial", "Cali", "$2.950.000 / mes", "72m²", "2 hab", "2 baños", "Nuevo")
     )
 
+    LaunchedEffect(featured.size) {
+        while (true) {
+            delay(3400)
+            carouselIndex = (carouselIndex + 1) % featured.size
+        }
+    }
+
     val uiState = when {
         query == "loading" -> PropertiesUiState.Loading
         query == "error" -> PropertiesUiState.Error
@@ -110,30 +120,21 @@ fun PropertiesScreen(
 
     Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF8F5F2))) {
         when (uiState) {
-            PropertiesUiState.Loading -> CenterInfo("Cargando propiedades...") { CircularProgressIndicator(color = Color(0xFFB8791F)) }
+            PropertiesUiState.Loading -> LoadingState()
             PropertiesUiState.Error -> CenterInfo("No pudimos cargar las propiedades.") {
-                Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B251D))) {
-                    Text("Reintentar")
-                }
+                Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B251D))) { Text("Reintentar") }
             }
             PropertiesUiState.Empty -> CenterInfo("No encontramos resultados para tu búsqueda.") {
-                Text("Prueba con otro filtro o ciudad.", color = Color(0xFF6B7280))
+                Icon(Icons.Default.HourglassBottom, contentDescription = null, tint = Color(0xFF8A5D34), modifier = Modifier.size(30.dp))
             }
             PropertiesUiState.Success -> {
                 LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 84.dp),
+                    modifier = Modifier.fillMaxSize().padding(bottom = 84.dp),
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     item {
-                        Text(
-                            text = "Explora propiedades",
-                            style = MaterialTheme.typography.headlineSmall,
-                            color = Color(0xFF2E1D17),
-                            fontWeight = FontWeight.Bold
-                        )
+                        Text("Explora propiedades", style = MaterialTheme.typography.headlineSmall, color = Color(0xFF2E1D17), fontWeight = FontWeight.Bold)
                     }
                     item {
                         PropertyCarousel(
@@ -158,24 +159,21 @@ fun PropertiesScreen(
                     item {
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             filters.forEach { filter ->
+                                val selected = selectedFilter == filter
+                                val scale by animateFloatAsState(if (selected) 1.03f else 1f, label = "chipScale")
                                 AssistChip(
+                                    modifier = Modifier.scale(scale),
                                     onClick = { selectedFilter = filter },
                                     label = { Text(filter) },
                                     colors = AssistChipDefaults.assistChipColors(
-                                        containerColor = if (selectedFilter == filter) Color(0xFF3B251D) else Color.White,
-                                        labelColor = if (selectedFilter == filter) Color.White else Color(0xFF3B251D)
+                                        containerColor = if (selected) Color(0xFF3B251D) else Color.White,
+                                        labelColor = if (selected) Color.White else Color(0xFF3B251D)
                                     )
                                 )
                             }
                         }
                     }
-                    item {
-                        Text(
-                            text = "${properties.size} propiedades encontradas",
-                            color = Color(0xFF6B7280),
-                            fontSize = 13.sp
-                        )
-                    }
+                    item { Text("${properties.size} propiedades encontradas", color = Color(0xFF6B7280), fontSize = 13.sp) }
                     item {
                         LazyVerticalGrid(
                             columns = GridCells.Fixed(2),
@@ -184,24 +182,20 @@ fun PropertiesScreen(
                             userScrollEnabled = false,
                             modifier = Modifier.height(490.dp)
                         ) {
-                            items(properties) { property ->
-                                PropertyCard(property)
+                            itemsIndexed(properties) { index, property ->
+                                AnimatedVisibility(
+                                    visible = true,
+                                    enter = fadeIn(initialAlpha = 0.3f) + scaleIn(initialScale = 0.94f)
+                                ) {
+                                    PropertyCard(property, index)
+                                }
                             }
                         }
                     }
                     item {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                             Text("Página 1 de 8", color = Color(0xFF6B7280))
-                            Button(
-                                onClick = {},
-                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B251D))
-                            ) {
-                                Text("Siguiente")
-                            }
+                            Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B251D))) { Text("Siguiente") }
                         }
                     }
                 }
@@ -219,76 +213,55 @@ fun PropertiesScreen(
 }
 
 @Composable
-private fun PropertyCarousel(
-    title: String,
-    index: Int,
-    count: Int,
-    onPrev: () -> Unit,
-    onNext: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(220.dp)
-            .clip(RoundedCornerShape(18.dp))
+private fun LoadingState() {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(18.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.casa),
-            contentDescription = title,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Brush.verticalGradient(listOf(Color.Transparent, Color(0xB0000000))))
-        )
+        ShimmerBlock(heightDp = 200)
+        ShimmerBlock(heightDp = 52)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            repeat(3) { ShimmerBlock(modifier = Modifier.weight(1f), heightDp = 36) }
+        }
+        repeat(4) { ShimmerBlock(heightDp = 120) }
+    }
+}
+
+@Composable
+private fun PropertyCarousel(title: String, index: Int, count: Int, onPrev: () -> Unit, onNext: () -> Unit) {
+    Box(modifier = Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(18.dp))) {
+        Image(painter = painterResource(id = R.drawable.casa), contentDescription = title, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+        Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, Color(0xB0000000)))))
         Column(modifier = Modifier.align(Alignment.BottomStart).padding(14.dp)) {
             Text("Destacado", color = Color(0xFFF6D2A5), fontWeight = FontWeight.Bold)
             Text(title, color = Color.White, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text("${index + 1} / $count", color = Color.White.copy(alpha = 0.9f), fontSize = 12.sp)
         }
         Row(modifier = Modifier.align(Alignment.BottomEnd).padding(12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            FilledTonalIconButton(onClick = onPrev) { Icon(Icons.Default.ChevronLeft, contentDescription = "Anterior") }
-            FilledTonalIconButton(onClick = onNext) { Icon(Icons.Default.ChevronRight, contentDescription = "Siguiente") }
+            Box(modifier = Modifier.background(Color.White.copy(alpha = 0.2f), CircleShape).clickable { onPrev() }.padding(6.dp)) {
+                Icon(Icons.Default.ChevronLeft, contentDescription = "Anterior", tint = Color.White)
+            }
+            Box(modifier = Modifier.background(Color.White.copy(alpha = 0.2f), CircleShape).clickable { onNext() }.padding(6.dp)) {
+                Icon(Icons.Default.ChevronRight, contentDescription = "Siguiente", tint = Color.White)
+            }
         }
         Row(modifier = Modifier.align(Alignment.TopEnd).padding(10.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             repeat(count) { dot ->
-                Box(
-                    modifier = Modifier
-                        .size(if (dot == index) 8.dp else 6.dp)
-                        .background(if (dot == index) Color(0xFFF6D2A5) else Color.White.copy(alpha = 0.6f), CircleShape)
-                )
+                val scale by animateFloatAsState(if (dot == index) 1.35f else 1f, label = "dot")
+                Box(modifier = Modifier.size(6.dp).scale(scale).background(if (dot == index) Color(0xFFF6D2A5) else Color.White.copy(alpha = 0.6f), CircleShape))
             }
         }
     }
 }
 
 @Composable
-private fun PropertyCard(property: PropertyCardItem) {
-    Card(colors = CardDefaults.cardColors(containerColor = Color.White), shape = RoundedCornerShape(14.dp)) {
+private fun PropertyCard(property: PropertyCardItem, index: Int) {
+    val scale by animateFloatAsState(targetValue = 1f, label = "card$index")
+    Card(colors = CardDefaults.cardColors(containerColor = Color.White), shape = RoundedCornerShape(14.dp), modifier = Modifier.scale(scale)) {
         Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(90.dp)
-                    .clip(RoundedCornerShape(10.dp))
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.casa),
-                    contentDescription = property.title,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-                Text(
-                    property.status,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .background(Color(0xFF3B251D), RoundedCornerShape(50))
-                        .padding(horizontal = 8.dp, vertical = 3.dp),
-                    color = Color.White,
-                    fontSize = 10.sp
-                )
+            Box(modifier = Modifier.fillMaxWidth().height(90.dp).clip(RoundedCornerShape(10.dp))) {
+                Image(painter = painterResource(id = R.drawable.casa), contentDescription = property.title, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
+                Text(property.status, modifier = Modifier.padding(8.dp).background(Color(0xFF3B251D), RoundedCornerShape(50)).padding(horizontal = 8.dp, vertical = 3.dp), color = Color.White, fontSize = 10.sp)
             }
             Text(property.title, fontWeight = FontWeight.Bold, color = Color(0xFF2E1D17), maxLines = 1)
             Row(verticalAlignment = Alignment.CenterVertically) {

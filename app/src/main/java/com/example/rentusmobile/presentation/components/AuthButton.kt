@@ -32,8 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.rentusmobile.presentation.animation.RentusAnimations
 import com.example.rentusmobile.presentation.theme.Primary
 import com.example.rentusmobile.presentation.theme.PrimaryDark
 import com.example.rentusmobile.presentation.theme.White
@@ -47,11 +49,16 @@ fun AuthButton(
 ) {
     val interactionSource = MutableInteractionSource()
     val isPressed by interactionSource.collectIsPressedAsState()
-    val scale = if (isPressed) 0.98f else 1f
+    val scale by androidx.compose.animation.core.animateFloatAsState(
+        targetValue = if (isPressed) 0.98f else 1f,
+        animationSpec = RentusAnimations.PressSpring,
+        label = "authBtnScale"
+    )
+
     val transition = rememberInfiniteTransition(label = "buttonGlow")
     val glowShift by transition.animateFloat(
-        initialValue = -120f,
-        targetValue = 420f,
+        initialValue = -280f,
+        targetValue = 900f,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 1800, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Restart
@@ -63,32 +70,32 @@ fun AuthButton(
         onClick = onClick,
         enabled = enabled && !isLoading,
         interactionSource = interactionSource,
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp),
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
             .scale(scale),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Primary,
-            disabledContainerColor = PrimaryDark.copy(alpha = 0.45f),
+            containerColor = Color.Transparent,
+            disabledContainerColor = PrimaryDark.copy(alpha = 0.4f),
             contentColor = White,
             disabledContentColor = White
         )
     ) {
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(
-                        Brush.linearGradient(
-                            colors = listOf(PrimaryDark, Primary, PrimaryDark),
-                            start = androidx.compose.ui.geometry.Offset(glowShift, 0f),
-                            end = androidx.compose.ui.geometry.Offset(glowShift + 220f, 220f)
-                        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(16.dp))
+                .background(
+                    Brush.linearGradient(
+                        colors = listOf(PrimaryDark, Primary, Color(0xFF7D512E), PrimaryDark),
+                        start = androidx.compose.ui.geometry.Offset(glowShift, 0f),
+                        end = androidx.compose.ui.geometry.Offset(glowShift + 260f, 220f)
                     )
-            )
-
+                ),
+            contentAlignment = Alignment.Center
+        ) {
             AnimatedContent(targetState = isLoading, label = "buttonContent") { loading ->
                 if (loading) {
                     CircularProgressIndicator(modifier = Modifier.size(18.dp), color = White, strokeWidth = 2.dp)
