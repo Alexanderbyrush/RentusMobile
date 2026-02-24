@@ -242,10 +242,8 @@ private fun SearchSection() {
     ) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text("Buscar propiedades", fontWeight = FontWeight.Bold, color = Color(0xFF2C3E50))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                SearchInput("Ciudad", Modifier.weight(1f))
-                SearchInput("Tipo", Modifier.weight(1f))
-            }
+            SearchInput("Ciudad", Modifier.fillMaxWidth())
+            SearchInput("Tipo", Modifier.fillMaxWidth())
             AppActionButton(
                 text = "Buscar",
                 onClick = {},
@@ -301,7 +299,7 @@ private fun PropertiesSection(properties: List<DemoProperty>, onNavigateProperti
 
                     Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Column(modifier = Modifier.weight(1f)) {
+                            Column(modifier = Modifier.width(220.dp)) {
                                 Text(property.title, fontWeight = FontWeight.Bold, color = Color(0xFF1F2937), fontSize = 18.sp)
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color(0xFF6B7280), modifier = Modifier.size(14.dp))
@@ -363,21 +361,17 @@ private fun CtaSection(onNavigateProperties: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
             Text("Explora todas las propiedades o comunícate con nuestro equipo.", color = Color.White.copy(alpha = 0.9f))
             Spacer(modifier = Modifier.height(14.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                AppActionButton(
-                    text = "Ver propiedades",
-                    onClick = onNavigateProperties,
-                    modifier = Modifier.weight(1f),
-                    contentColor = Color(0xFF3B251D),
-                    gradient = listOf(Color(0xFFFFFFFF), Color(0xFFF1E6D7), Color(0xFFFFFFFF))
-                )
-                AppActionButton(
-                    text = "Contacto",
-                    onClick = {},
-                    modifier = Modifier.weight(1f),
-                    gradient = listOf(Color(0xFF5A3A2B), Color(0xFF7A513A), Color(0xFF5A3A2B))
-                )
-            }
+            AppActionButton(
+                text = "Ver propiedades",
+                onClick = onNavigateProperties,
+                contentColor = Color(0xFF3B251D),
+                gradient = listOf(Color(0xFFFFFFFF), Color(0xFFF1E6D7), Color(0xFFFFFFFF))
+            )
+            AppActionButton(
+                text = "Contacto",
+                onClick = {},
+                gradient = listOf(Color(0xFF5A3A2B), Color(0xFF7A513A), Color(0xFF5A3A2B))
+            )
         }
     }
 }
