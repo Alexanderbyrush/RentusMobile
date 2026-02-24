@@ -64,6 +64,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rentusmobile.R
+import com.example.rentusmobile.presentation.animation.AnimatedBackground
 import com.example.rentusmobile.presentation.animation.ShimmerBlock
 import com.example.rentusmobile.presentation.components.HomeNavbar
 import kotlinx.coroutines.delay
@@ -118,8 +119,16 @@ fun PropertiesScreen(
         else -> PropertiesUiState.Success
     }
 
-    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF8F5F2))) {
-        when (uiState) {
+    AnimatedBackground(
+        colors = listOf(Color(0xFFF8F5F2), Color(0xFFF4EEE7), Color(0xFFF8F5F2)),
+        blobColors = listOf(
+            Color(0xFF3B251D).copy(alpha = 0.05f),
+            Color(0xFFDA9C5F).copy(alpha = 0.06f),
+            Color.White.copy(alpha = 0.07f)
+        )
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            when (uiState) {
             PropertiesUiState.Loading -> LoadingState()
             PropertiesUiState.Error -> CenterInfo("No pudimos cargar las propiedades.") {
                 Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B251D))) { Text("Reintentar") }
@@ -202,13 +211,14 @@ fun PropertiesScreen(
             }
         }
 
-        HomeNavbar(
-            modifier = Modifier.align(Alignment.BottomCenter),
+            HomeNavbar(
+                modifier = Modifier.align(Alignment.BottomCenter),
             selectedTab = "Propiedades",
             onNavigateHome = onNavigateHome,
             onNavigateProperties = onNavigateProperties,
-            onNavigateAbout = onNavigateAbout
-        )
+                onNavigateAbout = onNavigateAbout
+            )
+        }
     }
 }
 
