@@ -1,9 +1,16 @@
 package com.example.rentusmobile.presentation.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -39,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -73,44 +82,43 @@ fun HomeNavbar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(78.dp)
-            .background(Brush.linearGradient(listOf(Color(0xFF3B251D), Color(0xFF2E1D17))), RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp))
-            .padding(horizontal = 14.dp),
+            .height(86.dp)
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        Color(0xCC3B251D),
+                        Color(0xD92E1D17)
+                    )
+                ),
+                RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+            )
+            .padding(horizontal = 14.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            quickLinks.forEach { item ->
-                val isActive = selectedTab == item.first
-                val scale by animateFloatAsState(if (isActive) 1.12f else 1f, label = "navScale")
-                val iconColor by animateColorAsState(if (isActive) Color(0xFFDA9C5F) else Color.White.copy(alpha = 0.86f), label = "navColor")
-
-                Column(
-                    modifier = Modifier
-                        .clickable { item.third.invoke() }
-                        .padding(vertical = 6.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        item.second,
-                        contentDescription = item.first,
-                        tint = iconColor,
-                        modifier = Modifier.size(23.dp).scale(scale)
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Box(
-                        modifier = Modifier
-                            .size(width = if (isActive) 18.dp else 6.dp, height = 3.dp)
-                            .background(if (isActive) Color(0xFFDA9C5F) else Color.Transparent, CircleShape)
-                    )
-                }
+        Row(
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            quickLinks.forEach { (label, icon, action) ->
+                val isActive = selectedTab == label
+                MorphingNavItem(
+                    label = label,
+                    icon = icon,
+                    selected = isActive,
+                    onClick = action
+                )
             }
         }
 
         Box(
             modifier = Modifier
                 .size(42.dp)
-                .background(Brush.radialGradient(listOf(Color(0xFFDA9C5F), Color(0xFF8A5D34))), CircleShape)
+                .background(
+                    Brush.radialGradient(listOf(Color(0xFFDA9C5F), Color(0xFF8A5D34))),
+                    CircleShape
+                )
                 .clickable { openMenu = true },
             contentAlignment = Alignment.Center
         ) {
@@ -142,12 +150,83 @@ fun HomeNavbar(
                         ) {
                             Icon(item.second, contentDescription = item.first, tint = Color(0xFF3B251D))
                         }
-                        Spacer(modifier = Modifier.size(12.dp))
+                        Spacer(modifier = Modifier.width(12.dp))
                         Text(item.first, color = Color(0xFF2C3E50), fontSize = 15.sp)
                     }
                 }
                 Spacer(modifier = Modifier.height(24.dp))
             }
         }
+    }
+}
+
+@Composable
+private fun MorphingNavItem(
+    label: String,
+    icon: ImageVector,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val pressed by interactionSource.collectIsPressedAsState()
+    val scale by animateFloatAsState(
+        targetValue = when {
+            pressed -> 0.92f
+            selected -> 1.08f
+            else -> 1f
+        },
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
+        label = "itemScale"
+    )
+    val iconTint by animateColorAsState(
+        targetValue = if (selected) Color(0xFFDA9C5F) else Color.White.copy(alpha = 0.78f),
+        label = "iconTint"
+    )
+    val bubbleWidth by animateDpAsState(
+        targetValue = if (selected) 52.dp else 38.dp,
+        label = "bubbleWidth"
+    )
+
+    Column(
+        modifier = Modifier
+            .scale(scale)
+            .clickable(interactionSource = interactionSource, indication = null, onClick = onClick),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .width(bubbleWidth)
+                .height(34.dp)
+                .background(
+                    if (selected) Brush.horizontalGradient(listOf(Color(0x99DA9C5F), Color(0x663B251D)))
+                    else Brush.horizontalGradient(listOf(Color.Transparent, Color.Transparent)),
+                    CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Crossfade(targetState = selected, label = "iconMorph") { state ->
+                Icon(
+                    icon,
+                    contentDescription = label,
+                    tint = if (state) Color(0xFFFFE7C7) else iconTint,
+                    modifier = Modifier.size(if (state) 24.dp else 22.dp)
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(2.dp))
+        AnimatedVisibility(visible = selected) {
+            Text(label, color = Color(0xFFFFE7C7), fontSize = 10.sp, fontWeight = FontWeight.SemiBold)
+        }
+        Box(
+            modifier = Modifier
+                .padding(top = 2.dp)
+                .width(if (selected) 20.dp else 6.dp)
+                .height(3.dp)
+                .background(
+                    if (selected) Brush.horizontalGradient(listOf(Color(0xFFFFD59A), Color(0xFFDA9C5F))) else Brush.horizontalGradient(listOf(Color.Transparent, Color.Transparent)),
+                    CircleShape
+                )
+        )
     }
 }
