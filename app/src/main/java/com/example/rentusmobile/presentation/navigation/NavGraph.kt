@@ -1,7 +1,9 @@
 package com.example.rentusmobile.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.rentusmobile.presentation.screens.auth.LoginScreen
@@ -22,16 +24,32 @@ sealed class Screen(val route: String) {
 fun NavGraph(
     navController: NavHostController
 ) {
+    fun navigateSingleTop(route: String, builder: NavOptionsBuilder.() -> Unit = {}) {
+        navController.navigate(route) {
+            launchSingleTop = true
+            builder()
+        }
+    }
+
+    fun navigateToRootTab(route: String) {
+        navigateSingleTop(route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            restoreState = true
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = Screen.Login.route
     ) {
         composable(Screen.Login.route) {
             LoginScreen(
-                onNavigateToRegister = { navController.navigate(Screen.Register.route) },
-                onNavigateBack = {},
+                onNavigateToRegister = { navigateSingleTop(Screen.Register.route) },
+                onNavigateBack = { navController.popBackStack() },
                 onLoginSuccess = {
-                    navController.navigate(Screen.Home.route) {
+                    navigateSingleTop(Screen.Home.route) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }
                 },
@@ -41,10 +59,10 @@ fun NavGraph(
 
         composable(Screen.Register.route) {
             RegisterScreen(
-                onNavigateToLogin = { navController.navigate(Screen.Login.route) },
+                onNavigateToLogin = { navController.popBackStack() },
                 onNavigateBack = { navController.popBackStack() },
                 onRegisterSuccess = {
-                    navController.navigate(Screen.Home.route) {
+                    navigateSingleTop(Screen.Home.route) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }
                 },
@@ -55,31 +73,23 @@ fun NavGraph(
         composable(Screen.Home.route) {
             HomeScreen(
                 onNavigateHome = {},
-                onNavigateProperties = { navController.navigate(Screen.Properties.route) },
-                onNavigateAbout = { navController.navigate(Screen.About.route) }
+                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) }
             )
         }
 
         composable(Screen.About.route) {
             AboutScreen(
-                onNavigateHome = {
-                    navController.navigate(Screen.Home.route) {
-                        popUpTo(Screen.Home.route) { inclusive = true }
-                    }
-                },
-                onNavigateProperties = { navController.navigate(Screen.Properties.route) }
+                onNavigateHome = { navigateToRootTab(Screen.Home.route) },
+                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) }
             )
         }
 
         composable(Screen.Properties.route) {
             PropertiesScreen(
-                onNavigateHome = {
-                    navController.navigate(Screen.Home.route) {
-                        popUpTo(Screen.Home.route) { inclusive = true }
-                    }
-                },
+                onNavigateHome = { navigateToRootTab(Screen.Home.route) },
                 onNavigateProperties = {},
-                onNavigateAbout = { navController.navigate(Screen.About.route) }
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) }
             )
         }
     }
