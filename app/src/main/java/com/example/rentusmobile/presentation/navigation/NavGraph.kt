@@ -8,6 +8,7 @@ import com.example.rentusmobile.presentation.screens.auth.LoginScreen
 import com.example.rentusmobile.presentation.screens.auth.RegisterScreen
 import com.example.rentusmobile.presentation.screens.home.AboutScreen
 import com.example.rentusmobile.presentation.screens.home.HomeScreen
+import com.example.rentusmobile.presentation.screens.home.PropertiesScreen
 
 sealed class Screen(val route: String) {
     data object Login : Screen("login")
@@ -71,7 +72,7 @@ fun NavGraph(
         }
 
         composable(Screen.Properties.route) {
-            HomeScreen(
+            PropertiesScreen(
                 onNavigateHome = {
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Home.route) { inclusive = true }
