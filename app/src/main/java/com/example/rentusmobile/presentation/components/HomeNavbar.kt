@@ -60,7 +60,9 @@ fun HomeNavbar(
     onNavigateHome: () -> Unit = {},
     onNavigateProperties: () -> Unit = {},
     onNavigateAbout: () -> Unit = {},
-    onNavigateProfile: () -> Unit = {}
+    onNavigateProfile: () -> Unit = {},
+    onNavigateNotifications: () -> Unit = {},
+    onNavigateContracts: () -> Unit = {}
 ) {
     var openMenu by remember { mutableStateOf(false) }
 
@@ -72,8 +74,8 @@ fun HomeNavbar(
 
     val menuItems = listOf(
         Triple("Mi Perfil", Icons.Default.Person, onNavigateProfile),
-        Triple("Notificaciones", Icons.Default.Notifications, {}),
-        Triple("Contratos", Icons.Default.Apartment, {}),
+        Triple("Notificaciones", Icons.Default.Notifications, onNavigateNotifications),
+        Triple("Contratos", Icons.Default.Apartment, onNavigateContracts),
         Triple("Pagos", Icons.Default.Payments, {}),
         Triple("Mantenimiento", Icons.Default.Build, {}),
         Triple("Mis Solicitudes", Icons.Default.Sms, {}),

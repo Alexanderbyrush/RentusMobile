@@ -75,7 +75,9 @@ fun HomeScreen(
     onNavigateHome: () -> Unit = {},
     onNavigateProperties: () -> Unit = {},
     onNavigateAbout: () -> Unit = {},
-    onNavigateProfile: () -> Unit = {}
+    onNavigateProfile: () -> Unit = {},
+    onNavigateNotifications: () -> Unit = {},
+    onNavigateContracts: () -> Unit = {}
 ) {
     val properties = remember {
         listOf(
@@ -111,7 +113,9 @@ fun HomeScreen(
             onNavigateHome = onNavigateHome,
             onNavigateProperties = onNavigateProperties,
             onNavigateAbout = onNavigateAbout,
-            onNavigateProfile = onNavigateProfile
+            onNavigateProfile = onNavigateProfile,
+            onNavigateNotifications = onNavigateNotifications,
+            onNavigateContracts = onNavigateContracts
         )
     }
 }

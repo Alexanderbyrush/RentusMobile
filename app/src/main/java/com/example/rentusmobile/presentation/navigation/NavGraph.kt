@@ -9,7 +9,9 @@ import androidx.navigation.compose.composable
 import com.example.rentusmobile.presentation.screens.auth.LoginScreen
 import com.example.rentusmobile.presentation.screens.auth.RegisterScreen
 import com.example.rentusmobile.presentation.screens.home.AboutScreen
+import com.example.rentusmobile.presentation.screens.home.ContractsScreen
 import com.example.rentusmobile.presentation.screens.home.HomeScreen
+import com.example.rentusmobile.presentation.screens.home.NotificationsScreen
 import com.example.rentusmobile.presentation.screens.home.ProfileScreen
 import com.example.rentusmobile.presentation.screens.home.PropertiesScreen
 
@@ -20,6 +22,8 @@ sealed class Screen(val route: String) {
     data object About : Screen("about")
     data object Properties : Screen("properties")
     data object Profile : Screen("profile")
+    data object Notifications : Screen("notifications")
+    data object Contracts : Screen("contracts")
 }
 
 @Composable
@@ -77,7 +81,9 @@ fun NavGraph(
                 onNavigateHome = {},
                 onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
                 onNavigateAbout = { navigateToRootTab(Screen.About.route) },
-                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) }
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) },
+                onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
+                onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) }
             )
         }
 
@@ -85,7 +91,9 @@ fun NavGraph(
             AboutScreen(
                 onNavigateHome = { navigateToRootTab(Screen.Home.route) },
                 onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
-                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) }
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) },
+                onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
+                onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) }
             )
         }
 
@@ -94,7 +102,9 @@ fun NavGraph(
                 onNavigateHome = { navigateToRootTab(Screen.Home.route) },
                 onNavigateProperties = {},
                 onNavigateAbout = { navigateToRootTab(Screen.About.route) },
-                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) }
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) },
+                onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
+                onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) }
             )
         }
 
@@ -103,7 +113,31 @@ fun NavGraph(
                 onNavigateHome = { navigateToRootTab(Screen.Home.route) },
                 onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
                 onNavigateAbout = { navigateToRootTab(Screen.About.route) },
-                onNavigateProfile = {}
+                onNavigateProfile = {},
+                onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
+                onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) }
+            )
+        }
+
+        composable(Screen.Notifications.route) {
+            NotificationsScreen(
+                onNavigateHome = { navigateToRootTab(Screen.Home.route) },
+                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) },
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) },
+                onNavigateNotifications = {},
+                onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) }
+            )
+        }
+
+        composable(Screen.Contracts.route) {
+            ContractsScreen(
+                onNavigateHome = { navigateToRootTab(Screen.Home.route) },
+                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) },
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) },
+                onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
+                onNavigateContracts = {}
             )
         }
     }
