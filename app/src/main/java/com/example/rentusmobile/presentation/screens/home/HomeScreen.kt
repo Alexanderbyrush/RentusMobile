@@ -74,7 +74,8 @@ private data class DemoProperty(
 fun HomeScreen(
     onNavigateHome: () -> Unit = {},
     onNavigateProperties: () -> Unit = {},
-    onNavigateAbout: () -> Unit = {}
+    onNavigateAbout: () -> Unit = {},
+    onNavigateProfile: () -> Unit = {}
 ) {
     val properties = remember {
         listOf(
@@ -109,7 +110,8 @@ fun HomeScreen(
             selectedTab = "Inicio",
             onNavigateHome = onNavigateHome,
             onNavigateProperties = onNavigateProperties,
-            onNavigateAbout = onNavigateAbout
+            onNavigateAbout = onNavigateAbout,
+            onNavigateProfile = onNavigateProfile
         )
     }
 }

@@ -86,7 +86,8 @@ private enum class PropertiesUiState { Loading, Error, Empty, Success }
 fun PropertiesScreen(
     onNavigateHome: () -> Unit = {},
     onNavigateProperties: () -> Unit = {},
-    onNavigateAbout: () -> Unit = {}
+    onNavigateAbout: () -> Unit = {},
+    onNavigateProfile: () -> Unit = {}
 ) {
     var query by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todas") }
@@ -214,7 +215,8 @@ fun PropertiesScreen(
                 selectedTab = "Propiedades",
                 onNavigateHome = onNavigateHome,
                 onNavigateProperties = onNavigateProperties,
-                onNavigateAbout = onNavigateAbout
+                onNavigateAbout = onNavigateAbout,
+                onNavigateProfile = onNavigateProfile
             )
         }
     }

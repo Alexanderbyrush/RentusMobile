@@ -59,7 +59,8 @@ fun HomeNavbar(
     selectedTab: String = "Inicio",
     onNavigateHome: () -> Unit = {},
     onNavigateProperties: () -> Unit = {},
-    onNavigateAbout: () -> Unit = {}
+    onNavigateAbout: () -> Unit = {},
+    onNavigateProfile: () -> Unit = {}
 ) {
     var openMenu by remember { mutableStateOf(false) }
 
@@ -70,13 +71,13 @@ fun HomeNavbar(
     )
 
     val menuItems = listOf(
-        Pair("Mi Perfil", Icons.Default.Person),
-        Pair("Notificaciones", Icons.Default.Notifications),
-        Pair("Contratos", Icons.Default.Apartment),
-        Pair("Pagos", Icons.Default.Payments),
-        Pair("Mantenimiento", Icons.Default.Build),
-        Pair("Mis Solicitudes", Icons.Default.Sms),
-        Pair("Ajustes", Icons.Default.Settings)
+        Triple("Mi Perfil", Icons.Default.Person, onNavigateProfile),
+        Triple("Notificaciones", Icons.Default.Notifications, {}),
+        Triple("Contratos", Icons.Default.Apartment, {}),
+        Triple("Pagos", Icons.Default.Payments, {}),
+        Triple("Mantenimiento", Icons.Default.Build, {}),
+        Triple("Mis Solicitudes", Icons.Default.Sms, {}),
+        Triple("Ajustes", Icons.Default.Settings, {})
     )
 
     Row(
@@ -134,11 +135,14 @@ fun HomeNavbar(
             Column(modifier = Modifier.padding(horizontal = 18.dp, vertical = 8.dp)) {
                 Text("Opciones", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color(0xFF2C3E50))
                 Spacer(modifier = Modifier.height(8.dp))
-                menuItems.forEach { item ->
+                menuItems.forEach { (label, icon, action) ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { openMenu = false }
+                            .clickable {
+                                openMenu = false
+                                action()
+                            }
                             .padding(vertical = 12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -148,10 +152,10 @@ fun HomeNavbar(
                                 .background(Color(0xFFF3E3D0), RoundedCornerShape(10.dp)),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(item.second, contentDescription = item.first, tint = Color(0xFF3B251D))
+                            Icon(icon, contentDescription = label, tint = Color(0xFF3B251D))
                         }
                         Spacer(modifier = Modifier.width(12.dp))
-                        Text(item.first, color = Color(0xFF2C3E50), fontSize = 15.sp)
+                        Text(label, color = Color(0xFF2C3E50), fontSize = 15.sp)
                     }
                 }
                 Spacer(modifier = Modifier.height(24.dp))

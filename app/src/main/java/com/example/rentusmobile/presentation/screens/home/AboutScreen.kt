@@ -47,7 +47,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun AboutScreen(
     onNavigateHome: () -> Unit,
-    onNavigateProperties: () -> Unit
+    onNavigateProperties: () -> Unit,
+    onNavigateProfile: () -> Unit = {}
 ) {
     AnimatedBackground(
         colors = listOf(Color(0xFF1A0E0A), Color(0xFF2E1D17), Color(0xFF3B2416)),
@@ -108,7 +109,8 @@ fun AboutScreen(
                 selectedTab = "Nosotros",
                 onNavigateHome = onNavigateHome,
                 onNavigateProperties = onNavigateProperties,
-                onNavigateAbout = {}
+                onNavigateAbout = {},
+                onNavigateProfile = onNavigateProfile
             )
         }
     }

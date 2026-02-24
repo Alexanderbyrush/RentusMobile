@@ -10,6 +10,7 @@ import com.example.rentusmobile.presentation.screens.auth.LoginScreen
 import com.example.rentusmobile.presentation.screens.auth.RegisterScreen
 import com.example.rentusmobile.presentation.screens.home.AboutScreen
 import com.example.rentusmobile.presentation.screens.home.HomeScreen
+import com.example.rentusmobile.presentation.screens.home.ProfileScreen
 import com.example.rentusmobile.presentation.screens.home.PropertiesScreen
 
 sealed class Screen(val route: String) {
@@ -18,6 +19,7 @@ sealed class Screen(val route: String) {
     data object Home : Screen("home")
     data object About : Screen("about")
     data object Properties : Screen("properties")
+    data object Profile : Screen("profile")
 }
 
 @Composable
@@ -74,14 +76,16 @@ fun NavGraph(
             HomeScreen(
                 onNavigateHome = {},
                 onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
-                onNavigateAbout = { navigateToRootTab(Screen.About.route) }
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) },
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) }
             )
         }
 
         composable(Screen.About.route) {
             AboutScreen(
                 onNavigateHome = { navigateToRootTab(Screen.Home.route) },
-                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) }
+                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) }
             )
         }
 
@@ -89,7 +93,17 @@ fun NavGraph(
             PropertiesScreen(
                 onNavigateHome = { navigateToRootTab(Screen.Home.route) },
                 onNavigateProperties = {},
-                onNavigateAbout = { navigateToRootTab(Screen.About.route) }
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) },
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) }
+            )
+        }
+
+        composable(Screen.Profile.route) {
+            ProfileScreen(
+                onNavigateHome = { navigateToRootTab(Screen.Home.route) },
+                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) },
+                onNavigateProfile = {}
             )
         }
     }
