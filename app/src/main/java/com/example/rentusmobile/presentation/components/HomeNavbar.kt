@@ -1,8 +1,7 @@
 package com.example.rentusmobile.presentation.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -38,7 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -75,52 +73,44 @@ fun HomeNavbar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(82.dp)
-            .clip(RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp))
-            .background(Brush.linearGradient(listOf(Color(0xFF3B251D), Color(0xFF2E1D17))))
+            .height(78.dp)
+            .background(Brush.linearGradient(listOf(Color(0xFF3B251D), Color(0xFF2E1D17))), RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp))
             .padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Rent", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 19.sp)
-            Text("Us", color = Color(0xFFDA9C5F), fontWeight = FontWeight.ExtraBold, fontSize = 19.sp)
-        }
-
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
             quickLinks.forEach { item ->
                 val isActive = selectedTab == item.first
-                val tabSize by animateDpAsState(if (isActive) 72.dp else 60.dp, label = "tabSize", animationSpec = spring())
-                val backgroundColor by animateColorAsState(
-                    targetValue = if (isActive) Color(0xFFDA9C5F) else Color.White.copy(alpha = 0.08f),
-                    label = "tabBackground"
-                )
-                val contentColor by animateColorAsState(
-                    targetValue = if (isActive) Color(0xFF2E1D17) else Color.White,
-                    label = "tabContent"
-                )
+                val scale by animateFloatAsState(if (isActive) 1.12f else 1f, label = "navScale")
+                val iconColor by animateColorAsState(if (isActive) Color(0xFFDA9C5F) else Color.White.copy(alpha = 0.86f), label = "navColor")
 
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .width(tabSize)
-                        .background(backgroundColor, RoundedCornerShape(14.dp))
                         .clickable { item.third.invoke() }
-                        .padding(horizontal = 6.dp, vertical = 8.dp)
+                        .padding(vertical = 6.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Icon(item.second, contentDescription = item.first, tint = contentColor, modifier = Modifier.size(18.dp))
-                    Text(item.first, color = contentColor, fontSize = 11.sp, maxLines = 1)
+                    Icon(
+                        item.second,
+                        contentDescription = item.first,
+                        tint = iconColor,
+                        modifier = Modifier.size(23.dp).scale(scale)
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Box(
+                        modifier = Modifier
+                            .size(width = if (isActive) 18.dp else 6.dp, height = 3.dp)
+                            .background(if (isActive) Color(0xFFDA9C5F) else Color.Transparent, CircleShape)
+                    )
                 }
             }
         }
 
         Box(
             modifier = Modifier
-                .size(44.dp)
-                .background(
-                    Brush.radialGradient(listOf(Color(0xFFDA9C5F), Color(0xFF8A5D34))),
-                    CircleShape
-                )
+                .size(42.dp)
+                .background(Brush.radialGradient(listOf(Color(0xFFDA9C5F), Color(0xFF8A5D34))), CircleShape)
                 .clickable { openMenu = true },
             contentAlignment = Alignment.Center
         ) {
@@ -140,9 +130,8 @@ fun HomeNavbar(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
                             .clickable { openMenu = false }
-                            .padding(vertical = 12.dp, horizontal = 4.dp),
+                            .padding(vertical = 12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Box(
@@ -153,7 +142,7 @@ fun HomeNavbar(
                         ) {
                             Icon(item.second, contentDescription = item.first, tint = Color(0xFF3B251D))
                         }
-                        Spacer(modifier = Modifier.width(12.dp))
+                        Spacer(modifier = Modifier.size(12.dp))
                         Text(item.first, color = Color(0xFF2C3E50), fontSize = 15.sp)
                     }
                 }

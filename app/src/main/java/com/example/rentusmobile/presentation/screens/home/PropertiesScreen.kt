@@ -36,8 +36,6 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -59,6 +57,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -66,6 +65,8 @@ import androidx.compose.ui.unit.sp
 import com.example.rentusmobile.R
 import com.example.rentusmobile.presentation.animation.AnimatedBackground
 import com.example.rentusmobile.presentation.animation.ShimmerBlock
+import com.example.rentusmobile.presentation.components.AnimatedHeading
+import com.example.rentusmobile.presentation.components.AppActionButton
 import com.example.rentusmobile.presentation.components.HomeNavbar
 import kotlinx.coroutines.delay
 
@@ -90,14 +91,13 @@ fun PropertiesScreen(
     var query by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todas") }
     var carouselIndex by remember { mutableIntStateOf(0) }
-    val filters = listOf("Todas", "Apartamento", "Casa", "Arriendo", "Venta")
 
+    val filters = listOf("Todas", "Apartamento", "Casa", "Arriendo", "Venta")
     val featured = listOf(
         "Penthouse con vista panorámica",
         "Casa familiar en zona residencial",
         "Apartamento moderno en el centro"
     )
-
     val properties = listOf(
         PropertyCardItem("Apartamento Laureles", "Medellín", "$2.200.000 / mes", "85m²", "3 hab", "2 baños", "Disponible"),
         PropertyCardItem("Casa Campestre", "Rionegro", "$620.000.000", "210m²", "4 hab", "3 baños", "Venta"),
@@ -129,93 +129,91 @@ fun PropertiesScreen(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             when (uiState) {
-            PropertiesUiState.Loading -> LoadingState()
-            PropertiesUiState.Error -> CenterInfo("No pudimos cargar las propiedades.") {
-                Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B251D))) { Text("Reintentar") }
-            }
-            PropertiesUiState.Empty -> CenterInfo("No encontramos resultados para tu búsqueda.") {
-                Icon(Icons.Default.HourglassBottom, contentDescription = null, tint = Color(0xFF8A5D34), modifier = Modifier.size(30.dp))
-            }
-            PropertiesUiState.Success -> {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize().padding(bottom = 84.dp),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    item {
-                        Text("Explora propiedades", style = MaterialTheme.typography.headlineSmall, color = Color(0xFF2E1D17), fontWeight = FontWeight.Bold)
-                    }
-                    item {
-                        PropertyCarousel(
-                            title = featured[carouselIndex],
-                            index = carouselIndex,
-                            count = featured.size,
-                            onPrev = { carouselIndex = (carouselIndex - 1 + featured.size) % featured.size },
-                            onNext = { carouselIndex = (carouselIndex + 1) % featured.size }
-                        )
-                    }
-                    item {
-                        OutlinedTextField(
-                            value = query,
-                            onValueChange = { query = it },
-                            modifier = Modifier.fillMaxWidth(),
-                            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                            placeholder = { Text("Buscar por ciudad, barrio o tipo") },
-                            shape = RoundedCornerShape(14.dp),
-                            singleLine = true
-                        )
-                    }
-                    item {
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            filters.forEach { filter ->
-                                val selected = selectedFilter == filter
-                                val scale by animateFloatAsState(if (selected) 1.03f else 1f, label = "chipScale")
-                                AssistChip(
-                                    modifier = Modifier.scale(scale),
-                                    onClick = { selectedFilter = filter },
-                                    label = { Text(filter) },
-                                    colors = AssistChipDefaults.assistChipColors(
-                                        containerColor = if (selected) Color(0xFF3B251D) else Color.White,
-                                        labelColor = if (selected) Color.White else Color(0xFF3B251D)
-                                    )
-                                )
-                            }
+                PropertiesUiState.Loading -> LoadingState()
+                PropertiesUiState.Error -> CenterInfo("No pudimos cargar las propiedades.") {
+                    AppActionButton(text = "Reintentar", onClick = {}, modifier = Modifier.fillMaxWidth(0.52f))
+                }
+                PropertiesUiState.Empty -> CenterInfo("No encontramos resultados para tu búsqueda.") {
+                    Icon(Icons.Default.HourglassBottom, contentDescription = null, tint = Color(0xFF8A5D34), modifier = Modifier.size(30.dp))
+                }
+                PropertiesUiState.Success -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize().padding(bottom = 84.dp),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        item { AnimatedHeading("Explora propiedades", style = TextStyle(fontSize = 28.sp)) }
+                        item {
+                            PropertyCarousel(
+                                title = featured[carouselIndex],
+                                index = carouselIndex,
+                                count = featured.size,
+                                onPrev = { carouselIndex = (carouselIndex - 1 + featured.size) % featured.size },
+                                onNext = { carouselIndex = (carouselIndex + 1) % featured.size }
+                            )
                         }
-                    }
-                    item { Text("${properties.size} propiedades encontradas", color = Color(0xFF6B7280), fontSize = 13.sp) }
-                    item {
-                        LazyVerticalGrid(
-                            columns = GridCells.Fixed(2),
-                            verticalArrangement = Arrangement.spacedBy(10.dp),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            userScrollEnabled = false,
-                            modifier = Modifier.height(490.dp)
-                        ) {
-                            itemsIndexed(properties) { index, property ->
-                                AnimatedVisibility(
-                                    visible = true,
-                                    enter = fadeIn(initialAlpha = 0.3f) + scaleIn(initialScale = 0.94f)
-                                ) {
-                                    PropertyCard(property, index)
+                        item {
+                            OutlinedTextField(
+                                value = query,
+                                onValueChange = { query = it },
+                                modifier = Modifier.fillMaxWidth(),
+                                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                                placeholder = { Text("Buscar por ciudad, barrio o tipo") },
+                                shape = RoundedCornerShape(14.dp),
+                                singleLine = true
+                            )
+                        }
+                        item {
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                filters.forEach { filter ->
+                                    val selected = selectedFilter == filter
+                                    val scale by animateFloatAsState(if (selected) 1.06f else 1f, label = "chipScale")
+                                    AssistChip(
+                                        modifier = Modifier.scale(scale),
+                                        onClick = { selectedFilter = filter },
+                                        label = { Text(filter) },
+                                        colors = AssistChipDefaults.assistChipColors(
+                                            containerColor = if (selected) Color(0xFF3B251D) else Color.White,
+                                            labelColor = if (selected) Color.White else Color(0xFF3B251D)
+                                        )
+                                    )
                                 }
                             }
                         }
-                    }
-                    item {
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                            Text("Página 1 de 8", color = Color(0xFF6B7280))
-                            Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B251D))) { Text("Siguiente") }
+                        item { Text("${properties.size} propiedades encontradas", color = Color(0xFF6B7280), fontSize = 13.sp) }
+                        item {
+                            LazyVerticalGrid(
+                                columns = GridCells.Fixed(2),
+                                verticalArrangement = Arrangement.spacedBy(10.dp),
+                                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                userScrollEnabled = false,
+                                modifier = Modifier.height(500.dp)
+                            ) {
+                                itemsIndexed(properties) { index, property ->
+                                    AnimatedVisibility(
+                                        visible = true,
+                                        enter = fadeIn(initialAlpha = 0.25f) + scaleIn(initialScale = 0.92f)
+                                    ) {
+                                        PropertyCard(property, index)
+                                    }
+                                }
+                            }
+                        }
+                        item {
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                AppActionButton(text = "Página 1 de 8", onClick = {}, modifier = Modifier.weight(1f), gradient = listOf(Color.White, Color.White, Color.White), contentColor = Color(0xFF6B7280))
+                                AppActionButton(text = "Siguiente", onClick = {}, modifier = Modifier.weight(1f))
+                            }
                         }
                     }
                 }
             }
-        }
 
             HomeNavbar(
                 modifier = Modifier.align(Alignment.BottomCenter),
-            selectedTab = "Propiedades",
-            onNavigateHome = onNavigateHome,
-            onNavigateProperties = onNavigateProperties,
+                selectedTab = "Propiedades",
+                onNavigateHome = onNavigateHome,
+                onNavigateProperties = onNavigateProperties,
                 onNavigateAbout = onNavigateAbout
             )
         }
@@ -228,7 +226,7 @@ private fun LoadingState() {
         modifier = Modifier.fillMaxSize().padding(18.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        ShimmerBlock(heightDp = 200)
+        ShimmerBlock(heightDp = 220)
         ShimmerBlock(heightDp = 52)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             repeat(3) { ShimmerBlock(modifier = Modifier.weight(1f), heightDp = 36) }
@@ -271,7 +269,12 @@ private fun PropertyCard(property: PropertyCardItem, index: Int) {
         Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Box(modifier = Modifier.fillMaxWidth().height(90.dp).clip(RoundedCornerShape(10.dp))) {
                 Image(painter = painterResource(id = R.drawable.casa), contentDescription = property.title, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
-                Text(property.status, modifier = Modifier.padding(8.dp).background(Color(0xFF3B251D), RoundedCornerShape(50)).padding(horizontal = 8.dp, vertical = 3.dp), color = Color.White, fontSize = 10.sp)
+                Text(
+                    property.status,
+                    modifier = Modifier.padding(8.dp).background(Color(0xFF3B251D), RoundedCornerShape(50)).padding(horizontal = 8.dp, vertical = 3.dp),
+                    color = Color.White,
+                    fontSize = 10.sp
+                )
             }
             Text(property.title, fontWeight = FontWeight.Bold, color = Color(0xFF2E1D17), maxLines = 1)
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -290,7 +293,10 @@ private fun PropertyCard(property: PropertyCardItem, index: Int) {
 
 @Composable
 private fun MiniFeature(icon: androidx.compose.ui.graphics.vector.ImageVector, text: String) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.background(Color(0xFFF6F1EB), RoundedCornerShape(50)).padding(horizontal = 6.dp, vertical = 3.dp)) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.background(Color(0xFFF6F1EB), RoundedCornerShape(50)).padding(horizontal = 6.dp, vertical = 3.dp)
+    ) {
         Icon(icon, contentDescription = null, tint = Color(0xFF8B5E34), modifier = Modifier.size(12.dp))
         Spacer(modifier = Modifier.width(4.dp))
         Text(text, fontSize = 10.sp, color = Color(0xFF6B7280))

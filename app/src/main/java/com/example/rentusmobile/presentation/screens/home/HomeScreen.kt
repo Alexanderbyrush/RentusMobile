@@ -39,8 +39,6 @@ import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -62,6 +60,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.rentusmobile.presentation.components.AnimatedHeading
+import com.example.rentusmobile.presentation.components.AppActionButton
 import com.example.rentusmobile.presentation.components.HomeNavbar
 import kotlinx.coroutines.delay
 
@@ -195,12 +195,9 @@ private fun HeroSection(scrollY: Int) {
                 Text("Plataforma líder en arriendos", color = Color.White.copy(alpha = 0.9f), fontSize = 12.sp)
             }
 
-            Text(
-                "Encuentra tu próximo hogar\ncon estilo RentUs",
-                color = Color.White,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 33.sp,
-                lineHeight = 38.sp
+            AnimatedHeading(
+                text = "Encuentra tu próximo hogar\ncon estilo RentUs",
+                style = androidx.compose.ui.text.TextStyle(fontSize = 33.sp, lineHeight = 38.sp)
             )
 
             Text(
@@ -209,24 +206,20 @@ private fun HeroSection(scrollY: Int) {
                 fontSize = 15.sp
             )
 
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Button(
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                AppActionButton(
+                    text = "Buscar ahora",
                     onClick = {},
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFC8A97E), contentColor = Color(0xFF2E1D17))
-                ) {
-                    Icon(Icons.Default.Search, contentDescription = null, modifier = Modifier.size(17.dp))
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text("Buscar ahora", fontWeight = FontWeight.Bold)
-                }
-
-                Button(
+                    modifier = Modifier.weight(1f),
+                    contentColor = Color(0xFF1F130E),
+                    gradient = listOf(Color(0xFFDA9C5F), Color(0xFFE4B782), Color(0xFFB87A3D))
+                )
+                AppActionButton(
+                    text = "Asesoría",
                     onClick = {},
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.12f), contentColor = Color.White)
-                ) {
-                    Icon(Icons.Default.Phone, contentDescription = null, modifier = Modifier.size(17.dp))
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text("Asesoría", fontWeight = FontWeight.SemiBold)
-                }
+                    modifier = Modifier.weight(1f),
+                    gradient = listOf(Color(0xFF3B251D), Color(0xFF4A3025), Color(0xFF6A4331))
+                )
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -298,7 +291,7 @@ private fun FilterPill(text: String, icon: androidx.compose.ui.graphics.vector.I
 @Composable
 private fun PropertiesSection(properties: List<DemoProperty>) {
     Column(modifier = Modifier.padding(horizontal = 18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text("Propiedades destacadas", color = Color(0xFF1F2937), fontWeight = FontWeight.Bold, fontSize = 22.sp)
+        AnimatedHeading("Propiedades destacadas", style = androidx.compose.ui.text.TextStyle(fontSize = 22.sp))
         properties.forEachIndexed { index, property ->
             val showDelay = 80 * (index + 1)
             var show by remember { mutableStateOf(false) }
@@ -350,13 +343,20 @@ private fun CtaSection() {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("¿Listo para mudarte?", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 22.sp)
             Text("Explora todas las propiedades o comunícate con nuestro equipo.", color = Color.White.copy(alpha = 0.9f))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFC8A97E), contentColor = Color(0xFF3B251D))) {
-                    Text("Ver propiedades", fontWeight = FontWeight.Bold)
-                }
-                Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = Color.White.copy(alpha = 0.14f), contentColor = Color.White)) {
-                    Text("Contactar")
-                }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                AppActionButton(
+                    text = "Ver propiedades",
+                    onClick = {},
+                    modifier = Modifier.weight(1f),
+                    contentColor = Color(0xFF1F130E),
+                    gradient = listOf(Color(0xFFDA9C5F), Color(0xFFE4B782), Color(0xFFC08649))
+                )
+                AppActionButton(
+                    text = "Contactar",
+                    onClick = {},
+                    modifier = Modifier.weight(1f),
+                    gradient = listOf(Color(0xFF3B251D), Color(0xFF5B3A2B), Color(0xFF7A513A))
+                )
             }
         }
     }
