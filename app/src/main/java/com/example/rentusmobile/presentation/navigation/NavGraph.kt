@@ -19,6 +19,7 @@ import com.example.rentusmobile.presentation.screens.home.MyReportsScreen
 import com.example.rentusmobile.presentation.screens.home.PaymentsScreen
 import com.example.rentusmobile.presentation.screens.home.ProfileScreen
 import com.example.rentusmobile.presentation.screens.home.PropertiesScreen
+import com.example.rentusmobile.presentation.screens.home.SettingsScreen
 
 sealed class Screen(val route: String) {
     data object Login : Screen("login")
@@ -34,6 +35,7 @@ sealed class Screen(val route: String) {
     data object MyRequests : Screen("my_requests")
     data object Requests : Screen("requests")
     data object MyReports : Screen("my_reports")
+    data object Settings : Screen("settings")
 }
 
 @Composable
@@ -98,7 +100,8 @@ fun NavGraph(
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
                 onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
-                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) }
             )
         }
 
@@ -113,7 +116,8 @@ fun NavGraph(
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
                 onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
-                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) }
             )
         }
 
@@ -129,7 +133,8 @@ fun NavGraph(
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
                 onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
-                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) }
             )
         }
 
@@ -145,7 +150,8 @@ fun NavGraph(
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
                 onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
-                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) }
             )
         }
 
@@ -161,7 +167,8 @@ fun NavGraph(
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
                 onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
-                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) }
             )
         }
 
@@ -177,7 +184,8 @@ fun NavGraph(
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
                 onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
-                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) }
             )
         }
 
@@ -193,7 +201,8 @@ fun NavGraph(
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
                 onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
-                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) }
             )
         }
 
@@ -209,7 +218,8 @@ fun NavGraph(
                 onNavigateMaintenance = {},
                 onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
-                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) }
             )
         }
 
@@ -225,7 +235,8 @@ fun NavGraph(
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
                 onNavigateMyRequests = {},
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
-                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) }
             )
         }
 
@@ -241,7 +252,8 @@ fun NavGraph(
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
                 onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
                 onNavigateRequests = {},
-                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) }
             )
         }
 
@@ -257,7 +269,25 @@ fun NavGraph(
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
                 onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
-                onNavigateMyReports = {}
+                onNavigateMyReports = {},
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) }
+            )
+        }
+
+        composable(Screen.Settings.route) {
+            SettingsScreen(
+                onNavigateHome = { navigateToRootTab(Screen.Home.route) },
+                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) },
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) },
+                onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
+                onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
+                onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = {}
             )
         }
 
