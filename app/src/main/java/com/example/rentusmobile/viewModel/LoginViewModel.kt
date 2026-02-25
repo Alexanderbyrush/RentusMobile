@@ -6,6 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentusmobile.data.repository.AuthRepository
+import com.example.rentusmobile.utils.Resource
+import com.example.rentusmobile.utils.getValidationErrors
 import kotlinx.coroutines.launch
 
 data class LoginState(
@@ -52,12 +54,23 @@ class LoginViewModel(
 
         viewModelScope.launch {
             state = state.copy(isLoading = true, errorMessage = null)
-            val result = authRepository.login(state.email, state.password)
-            state = if (result.isSuccess) {
-                onSuccess()
-                state.copy(isLoading = false)
-            } else {
-                state.copy(isLoading = false, errorMessage = "No se pudo iniciar sesión. Intenta nuevamente.")
+            when (val result = authRepository.login(state.email, state.password, state.rememberMe)) {
+                is Resource.Success -> {
+                    onSuccess()
+                    state = state.copy(isLoading = false)
+                }
+
+                is Resource.Error -> {
+                    state = state.copy(
+                        isLoading = false,
+                        errorMessage = result.message,
+                        validationErrors = result.getValidationErrors().orEmpty()
+                    )
+                }
+
+                Resource.Loading -> {
+                    state = state.copy(isLoading = true)
+                }
             }
         }
     }

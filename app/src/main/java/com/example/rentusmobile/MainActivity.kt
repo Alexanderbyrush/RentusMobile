@@ -8,12 +8,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.example.rentusmobile.network.client.ApiClient
 import com.example.rentusmobile.presentation.navigation.NavGraph
 import com.example.rentusmobile.presentation.theme.RentusMobileTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ApiClient.init(applicationContext)
         setContent {
             RentusMobileTheme {
                 Surface(

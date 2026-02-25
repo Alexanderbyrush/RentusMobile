@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentusmobile.data.models.RegisterData
 import com.example.rentusmobile.data.repository.AuthRepository
+import com.example.rentusmobile.utils.Resource
+import com.example.rentusmobile.utils.getValidationErrors
 import kotlinx.coroutines.launch
 
 data class RegisterState(
@@ -80,7 +82,7 @@ class RegisterViewModel(
 
         viewModelScope.launch {
             state = state.copy(isLoading = true, errorMessage = null)
-            val result = authRepository.register(
+            when (val result = authRepository.register(
                 RegisterData(
                     name = state.name,
                     email = state.email,
@@ -89,12 +91,23 @@ class RegisterViewModel(
                     address = state.address,
                     password = state.password
                 )
-            )
-            state = if (result.isSuccess) {
-                onSuccess()
-                state.copy(isLoading = false)
-            } else {
-                state.copy(isLoading = false, errorMessage = "No se pudo completar el registro.")
+            )) {
+                is Resource.Success -> {
+                    onSuccess()
+                    state = state.copy(isLoading = false)
+                }
+
+                is Resource.Error -> {
+                    state = state.copy(
+                        isLoading = false,
+                        errorMessage = result.message,
+                        validationErrors = result.getValidationErrors().orEmpty()
+                    )
+                }
+
+                Resource.Loading -> {
+                    state = state.copy(isLoading = true)
+                }
             }
         }
     }
