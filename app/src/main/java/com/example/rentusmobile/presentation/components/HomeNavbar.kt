@@ -26,7 +26,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apartment
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Flag
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Payments
@@ -65,7 +67,9 @@ fun HomeNavbar(
     onNavigateContracts: () -> Unit = {},
     onNavigatePayments: () -> Unit = {},
     onNavigateMaintenance: () -> Unit = {},
-    onNavigateMyRequests: () -> Unit = {}
+    onNavigateMyRequests: () -> Unit = {},
+    onNavigateRequests: () -> Unit = {},
+    onNavigateMyReports: () -> Unit = {}
 ) {
     var openMenu by remember { mutableStateOf(false) }
 
@@ -81,7 +85,9 @@ fun HomeNavbar(
         Triple("Contratos", Icons.Default.Apartment, onNavigateContracts),
         Triple("Pagos", Icons.Default.Payments, onNavigatePayments),
         Triple("Mantenimiento", Icons.Default.Build, onNavigateMaintenance),
+        Triple("Solicitudes", Icons.Default.Description, onNavigateRequests),
         Triple("Mis Solicitudes", Icons.Default.Sms, onNavigateMyRequests),
+        Triple("Mis Reportes", Icons.Default.Flag, onNavigateMyReports),
         Triple("Ajustes", Icons.Default.Settings, {})
     )
 

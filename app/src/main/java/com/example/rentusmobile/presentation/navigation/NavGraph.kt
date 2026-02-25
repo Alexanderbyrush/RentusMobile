@@ -14,6 +14,8 @@ import com.example.rentusmobile.presentation.screens.home.HomeScreen
 import com.example.rentusmobile.presentation.screens.home.NotificationsScreen
 import com.example.rentusmobile.presentation.screens.home.MaintenanceScreen
 import com.example.rentusmobile.presentation.screens.home.MyRequestsScreen
+import com.example.rentusmobile.presentation.screens.home.RequestsScreen
+import com.example.rentusmobile.presentation.screens.home.MyReportsScreen
 import com.example.rentusmobile.presentation.screens.home.PaymentsScreen
 import com.example.rentusmobile.presentation.screens.home.ProfileScreen
 import com.example.rentusmobile.presentation.screens.home.PropertiesScreen
@@ -30,6 +32,8 @@ sealed class Screen(val route: String) {
     data object Payments : Screen("payments")
     data object Maintenance : Screen("maintenance")
     data object MyRequests : Screen("my_requests")
+    data object Requests : Screen("requests")
+    data object MyReports : Screen("my_reports")
 }
 
 @Composable
@@ -92,7 +96,9 @@ fun NavGraph(
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
-                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
             )
         }
 
@@ -105,7 +111,9 @@ fun NavGraph(
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
-                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
             )
         }
 
@@ -119,7 +127,9 @@ fun NavGraph(
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
-                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
             )
         }
 
@@ -133,7 +143,9 @@ fun NavGraph(
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
-                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
             )
         }
 
@@ -147,7 +159,9 @@ fun NavGraph(
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
-                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
             )
         }
 
@@ -161,7 +175,9 @@ fun NavGraph(
                 onNavigateContracts = {},
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
-                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
             )
         }
 
@@ -175,7 +191,9 @@ fun NavGraph(
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = {},
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
-                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
             )
         }
 
@@ -189,7 +207,9 @@ fun NavGraph(
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
                 onNavigateMaintenance = {},
-                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
             )
         }
 
@@ -203,8 +223,43 @@ fun NavGraph(
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
                 onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
-                onNavigateMyRequests = {}
+                onNavigateMyRequests = {},
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
             )
         }
+
+        composable(Screen.Requests.route) {
+            RequestsScreen(
+                onNavigateHome = { navigateToRootTab(Screen.Home.route) },
+                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) },
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) },
+                onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
+                onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
+                onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = {},
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) }
+            )
+        }
+
+        composable(Screen.MyReports.route) {
+            MyReportsScreen(
+                onNavigateHome = { navigateToRootTab(Screen.Home.route) },
+                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) },
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) },
+                onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
+                onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
+                onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = {}
+            )
+        }
+
     }
 }
