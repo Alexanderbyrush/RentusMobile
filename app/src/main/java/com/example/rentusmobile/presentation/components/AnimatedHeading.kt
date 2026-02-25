@@ -1,5 +1,6 @@
 package com.example.rentusmobile.presentation.components
 
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -18,13 +19,15 @@ import androidx.compose.ui.text.style.TextAlign
 fun AnimatedHeading(
     text: String,
     style: TextStyle,
-    textAlign: TextAlign? = null
+    textAlign: TextAlign? = null,
+    gradientColors: List<Color> = listOf(Color(0xFF2E1D17), Color(0xFF8A5D34), Color(0xFFDA9C5F)),
+    durationMillis: Int = 2200
 ) {
     val transition = rememberInfiniteTransition(label = "heading")
     val shift by transition.animateFloat(
         initialValue = -180f,
         targetValue = 540f,
-        animationSpec = infiniteRepeatable(animation = tween(2200), repeatMode = RepeatMode.Reverse),
+        animationSpec = infiniteRepeatable(animation = tween(durationMillis, easing = LinearEasing), repeatMode = RepeatMode.Reverse),
         label = "headingShift"
     )
 
@@ -33,7 +36,7 @@ fun AnimatedHeading(
         style = style.copy(
             fontWeight = FontWeight.ExtraBold,
             brush = Brush.linearGradient(
-                colors = listOf(Color(0xFF2E1D17), Color(0xFF8A5D34), Color(0xFFDA9C5F)),
+                colors = gradientColors,
                 start = androidx.compose.ui.geometry.Offset(shift, 0f),
                 end = androidx.compose.ui.geometry.Offset(shift + 220f, 180f)
             )

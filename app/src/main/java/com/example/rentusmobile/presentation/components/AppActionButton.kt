@@ -1,7 +1,9 @@
 package com.example.rentusmobile.presentation.components
 
-import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.StartOffset
+import androidx.compose.animation.core.StartOffsetType
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -36,17 +38,23 @@ fun AppActionButton(
     modifier: Modifier = Modifier,
     contentColor: Color = Color.White,
     gradient: List<Color> = listOf(Color(0xFF3B251D), Color(0xFF5A3728), Color(0xFFDA9C5F)),
-    paddingValues: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
+    paddingValues: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+    animationSeed: Int = text.hashCode()
 ) {
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
     val scale = if (pressed) 0.98f else 1f
 
+    val phaseOffset = remember(animationSeed) { kotlin.math.abs(animationSeed % 1800) }
     val transition = rememberInfiniteTransition(label = "appBtn")
     val shift by transition.animateFloat(
         initialValue = -220f,
-        targetValue = 700f,
-        animationSpec = infiniteRepeatable(tween(1700, easing = FastOutSlowInEasing), RepeatMode.Restart),
+        targetValue = 760f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 3000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart,
+            initialStartOffset = StartOffset(phaseOffset, StartOffsetType.FastForward)
+        ),
         label = "btnShift"
     )
 

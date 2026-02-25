@@ -193,7 +193,9 @@ private fun HeroSection() {
 
                 AnimatedHeading(
                     text = "El hogar que sueñas\nse ve así de brutal",
-                    style = TextStyle(fontSize = 34.sp, lineHeight = 36.sp)
+                    style = TextStyle(fontSize = 34.sp, lineHeight = 36.sp),
+                    gradientColors = listOf(Color(0xFFFFE7C7), Color(0xFFF6D2A5), Color(0xFFDA9C5F), Color(0xFFB77A49)),
+                    durationMillis = 2900
                 )
 
                 Text(
@@ -274,7 +276,8 @@ private fun SearchSection() {
                 AppActionButton(
                     text = "Buscar",
                     onClick = {},
-                    gradient = listOf(Color(0xFF3B251D), Color(0xFF2E1D17), Color(0xFFDA9C5F))
+                    gradient = listOf(Color(0xFF3B251D), Color(0xFF2E1D17), Color(0xFFDA9C5F)),
+                    animationSeed = 101
                 )
             }
         }
@@ -296,7 +299,12 @@ private fun SearchInput(label: String, modifier: Modifier = Modifier) {
 @Composable
 private fun PropertiesSection(properties: List<DemoProperty>, onNavigateProperties: () -> Unit) {
     Column(modifier = Modifier.padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text("Propiedades destacadas", style = TextStyle(fontSize = 26.sp, fontWeight = FontWeight.Bold), color = Color.White)
+        AnimatedHeading(
+            text = "Propiedades destacadas",
+            style = TextStyle(fontSize = 26.sp),
+            gradientColors = listOf(Color(0xFFFFE7C7), Color(0xFFF6D2A5), Color(0xFFDA9C5F)),
+            durationMillis = 2800
+        )
         Text("Cartas con borde iluminado y volumen para una experiencia premium.", color = Color(0xFFE8DAC8))
 
         properties.forEach { property ->
@@ -333,7 +341,12 @@ private fun PropertiesSection(properties: List<DemoProperty>, onNavigateProperti
                         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Column(modifier = Modifier.width(220.dp)) {
-                                    Text(property.title, fontWeight = FontWeight.Bold, color = Color(0xFFF5ECE1), fontSize = 18.sp)
+                                    AnimatedHeading(
+                                        text = property.title,
+                                        style = TextStyle(fontSize = 18.sp),
+                                        gradientColors = listOf(Color(0xFFFFF4E8), Color(0xFFF6D2A5), Color(0xFFDA9C5F)),
+                                        durationMillis = 3000
+                                    )
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color(0xFFDA9C5F), modifier = Modifier.size(14.dp))
                                         Text(property.city, color = Color(0xFFBCA99A), fontSize = 12.sp)
@@ -351,7 +364,8 @@ private fun PropertiesSection(properties: List<DemoProperty>, onNavigateProperti
                             AppActionButton(
                                 text = "Ver detalles",
                                 onClick = {},
-                                gradient = listOf(Color(0xFF4D2F24), Color(0xFF5D3A2D), Color(0xFFDA9C5F))
+                                gradient = listOf(Color(0xFF4D2F24), Color(0xFF5D3A2D), Color(0xFFDA9C5F)),
+                                animationSeed = property.title.hashCode()
                             )
                         }
                     }
@@ -359,7 +373,7 @@ private fun PropertiesSection(properties: List<DemoProperty>, onNavigateProperti
             }
         }
 
-        AppActionButton(text = "Ver todas", onClick = onNavigateProperties)
+        AppActionButton(text = "Ver todas", onClick = onNavigateProperties, animationSeed = 303)
     }
 }
 
@@ -390,7 +404,12 @@ private fun CtaSection(onNavigateProperties: () -> Unit) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFC8A97E), modifier = Modifier.size(32.dp))
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("¿Listo para encontrar tu próximo hogar?", style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Bold), color = Color.White)
+                AnimatedHeading(
+                    "¿Listo para encontrar tu próximo hogar?",
+                    style = TextStyle(fontSize = 22.sp),
+                    gradientColors = listOf(Color(0xFFFFEED7), Color(0xFFF6D2A5), Color(0xFFC8A97E)),
+                    durationMillis = 2800
+                )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text("Explora todas las propiedades o comunícate con nuestro equipo.", color = Color.White.copy(alpha = 0.9f))
                 Spacer(modifier = Modifier.height(14.dp))
@@ -398,7 +417,8 @@ private fun CtaSection(onNavigateProperties: () -> Unit) {
                     text = "Ver propiedades",
                     onClick = onNavigateProperties,
                     contentColor = Color(0xFF3B251D),
-                    gradient = listOf(Color(0xFFFFFFFF), Color(0xFFF1E6D7), Color(0xFFFFFFFF))
+                    gradient = listOf(Color(0xFFFFFFFF), Color(0xFFF1E6D7), Color(0xFFFFFFFF)),
+                    animationSeed = 707
                 )
             }
         }
