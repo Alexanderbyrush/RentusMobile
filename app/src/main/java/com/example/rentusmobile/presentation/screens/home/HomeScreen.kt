@@ -142,7 +142,7 @@ private fun CinematicParticlesBackground() {
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
-        repeat(85) { index ->
+        repeat(36) { index ->
             val size = (2 + (index % 4)).dp
             Box(
                 modifier = Modifier
@@ -152,7 +152,7 @@ private fun CinematicParticlesBackground() {
                     .background(if (index % 3 == 0) Color(0x66DA9C5F) else Color(0x33F6D2A5))
             )
         }
-        repeat(65) { index ->
+        repeat(24) { index ->
             val size = (1 + (index % 3)).dp
             Box(
                 modifier = Modifier
@@ -408,22 +408,12 @@ private fun GlowingSurface(
     corner: androidx.compose.ui.unit.Dp,
     content: @Composable () -> Unit
 ) {
-    val transition = rememberInfiniteTransition(label = "glowCard")
-    val shift by transition.animateFloat(
-        initialValue = -240f,
-        targetValue = 620f,
-        animationSpec = infiniteRepeatable(tween(2200, easing = LinearEasing), RepeatMode.Restart),
-        label = "glowShift"
-    )
-
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(corner))
             .background(
                 Brush.linearGradient(
-                    colors = listOf(Color(0x55DA9C5F), Color(0x229B6C45), Color(0x44F6D2A5), Color(0x33906A49)),
-                    start = androidx.compose.ui.geometry.Offset(shift, 0f),
-                    end = androidx.compose.ui.geometry.Offset(shift + 220f, 220f)
+                    colors = listOf(Color(0x55DA9C5F), Color(0x229B6C45), Color(0x44F6D2A5), Color(0x33906A49))
                 )
             )
             .padding(1.5.dp)
