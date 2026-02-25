@@ -7,7 +7,6 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,8 +23,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CreditCard
-import androidx.compose.material.icons.filled.Payments
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -48,10 +46,10 @@ import androidx.compose.ui.unit.sp
 import com.example.rentusmobile.presentation.components.AppActionButton
 import com.example.rentusmobile.presentation.components.HomeNavbar
 
-data class PaymentRow(val id: Int, val amount: String, val status: String, val date: String, val type: String)
+data class MaintenanceItem(val id: Int, val date: String, val property: String, val title: String, val priority: String, val status: String)
 
 @Composable
-fun PaymentsScreen(
+fun MaintenanceScreen(
     onNavigateHome: () -> Unit = {},
     onNavigateProperties: () -> Unit = {},
     onNavigateAbout: () -> Unit = {},
@@ -64,31 +62,33 @@ fun PaymentsScreen(
     var query by remember { mutableStateOf("") }
     val rows = remember {
         listOf(
-            PaymentRow(5531, "$2.500.000", "paid", "2026-01-10", "Arriendo"),
-            PaymentRow(5532, "$800.000", "pending", "2026-01-20", "Depósito"),
-            PaymentRow(5533, "$2.500.000", "failed", "2026-02-10", "Arriendo")
+            MaintenanceItem(901, "2026-03-01", "Torre Alta 402", "Fuga en cocina", "high", "pending"),
+            MaintenanceItem(902, "2026-03-03", "Vista Sol 1301", "Cambio de luminaria", "medium", "in_progress"),
+            MaintenanceItem(903, "2026-03-05", "Gran Reserva 609", "Revisión de cerradura", "low", "completed")
         )
     }
-    val filtered = rows.filter { it.id.toString().contains(query) || it.type.contains(query, true) }
+    val filtered = rows.filter {
+        it.title.contains(query, true) || it.property.contains(query, true) || it.id.toString().contains(query)
+    }
 
     Box(modifier = Modifier.fillMaxSize().background(Brush.linearGradient(listOf(Color(0xFF1A0E0A), Color(0xFF2E1D17), Color(0xFF3B2416))))) {
-        PaymentsAnimatedBg()
+        MaintenanceBg()
         Column(modifier = Modifier.fillMaxSize().padding(bottom = 84.dp)) {
             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(modifier = Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(Color(0x22DA9C5F)), contentAlignment = Alignment.Center) {
-                        Icon(Icons.Default.Payments, contentDescription = null, tint = Color(0xFFDA9C5F))
+                        Icon(Icons.Default.Build, contentDescription = null, tint = Color(0xFFDA9C5F))
                     }
                     Spacer(modifier = Modifier.width(10.dp))
                     Column {
-                        Text("Pagos", color = Color(0xFFF0E5DB), fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
-                        Text("Historial y estado de tus pagos", color = Color(0xFFD4C5B9), fontSize = 12.sp)
+                        Text("Mantenimiento", color = Color(0xFFF0E5DB), fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
+                        Text("Solicitudes y estado en tiempo real", color = Color(0xFFD4C5B9), fontSize = 12.sp)
                     }
                 }
 
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-                    AppActionButton(text = "Pagar ahora", onClick = {}, modifier = Modifier.weight(1f), contentColor = Color(0xFF1A0E0A), gradient = listOf(Color(0xFFDA9C5F), Color(0xFFB8791F), Color(0xFFDA9C5F)))
-                    AppActionButton(text = "Métodos", onClick = {}, modifier = Modifier.weight(1f), gradient = listOf(Color(0xFF3B251D), Color(0xFF4D2F24), Color(0xFF6C4531)))
+                    AppActionButton(text = "Nueva solicitud", onClick = {}, modifier = Modifier.weight(1f), contentColor = Color(0xFF1A0E0A), gradient = listOf(Color(0xFFDA9C5F), Color(0xFFB8791F), Color(0xFFDA9C5F)))
+                    AppActionButton(text = "Pendientes", onClick = {}, modifier = Modifier.weight(1f), gradient = listOf(Color(0xFF3B251D), Color(0xFF4D2F24), Color(0xFF6C4531)))
                 }
 
                 OutlinedTextField(
@@ -96,32 +96,39 @@ fun PaymentsScreen(
                     onValueChange = { query = it },
                     modifier = Modifier.fillMaxWidth(),
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                    placeholder = { Text("Buscar por id o tipo") },
+                    placeholder = { Text("Buscar por propiedad o id") },
                     singleLine = true
                 )
             }
 
-            LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp, vertical = 4.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                items(filtered) { p ->
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp, vertical = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(filtered) { row ->
                     Card(shape = RoundedCornerShape(14.dp), colors = CardDefaults.cardColors(containerColor = Color(0xF23A2318))) {
-                        Row(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                            Box(modifier = Modifier.size(40.dp).clip(RoundedCornerShape(10.dp)).background(Color(0x22DA9C5F)), contentAlignment = Alignment.Center) {
-                                Icon(Icons.Default.CreditCard, contentDescription = null, tint = Color(0xFFDA9C5F))
-                            }
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text("Pago #${p.id}", color = Color.White, fontWeight = FontWeight.Bold)
-                                Text("${p.date} · ${p.type}", color = Color(0xFFD4C5B9), fontSize = 12.sp)
-                            }
-                            Column(horizontalAlignment = Alignment.End) {
-                                Text(p.amount, color = Color(0xFFDA9C5F), fontWeight = FontWeight.ExtraBold)
-                                val c = when (p.status) {
-                                    "paid" -> Color(0xFF2ECC71)
+                        Column(modifier = Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text("#${row.id}", color = Color(0xFFDA9C5F), fontWeight = FontWeight.Bold)
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Text(row.date, color = Color(0xFFD4C5B9), fontSize = 12.sp)
+                                Spacer(modifier = Modifier.weight(1f))
+                                val statusColor = when (row.status) {
                                     "pending" -> Color(0xFFF59E0B)
-                                    else -> Color(0xFFE74C3C)
+                                    "in_progress" -> Color(0xFF93C5FD)
+                                    else -> Color(0xFF2ECC71)
                                 }
-                                Text(p.status.uppercase(), color = c, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                Text(row.status.uppercase(), color = statusColor, fontSize = 11.sp, fontWeight = FontWeight.Bold)
                             }
+                            Text(row.property, color = Color.White, fontWeight = FontWeight.SemiBold)
+                            Text(row.title, color = Color(0xFFE5D6C8))
+                            val priorityColor = when (row.priority) {
+                                "high" -> Color(0xFFE74C3C)
+                                "medium" -> Color(0xFFF59E0B)
+                                else -> Color(0xFFA0AEC0)
+                            }
+                            Text("Prioridad: ${row.priority}", color = priorityColor, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -144,14 +151,17 @@ fun PaymentsScreen(
 }
 
 @Composable
-private fun PaymentsAnimatedBg() {
-    val t = rememberInfiniteTransition(label = "paybg")
-    val shift by t.animateFloat(0f, -16f, infiniteRepeatable(tween(2000, easing = LinearEasing), RepeatMode.Reverse), label = "s")
+private fun MaintenanceBg() {
+    val t = rememberInfiniteTransition(label = "mnt-bg")
+    val shift by t.animateFloat(0f, -15f, infiniteRepeatable(tween(2200, easing = LinearEasing), RepeatMode.Reverse), label = "mnt-shift")
     Box(Modifier.fillMaxSize()) {
-        repeat(12) { i ->
+        repeat(10) { i ->
             Box(
-                modifier = Modifier.padding(start = (i * 32).dp, top = (50 + i * 46).dp + shift.dp)
-                    .size((4 + (i % 2)).dp).clip(CircleShape).background(Color(0x44DA9C5F))
+                modifier = Modifier
+                    .padding(start = (i * 34).dp, top = (70 + i * 45).dp + shift.dp)
+                    .size((4 + i % 2).dp)
+                    .clip(CircleShape)
+                    .background(Color(0x44DA9C5F))
             )
         }
     }

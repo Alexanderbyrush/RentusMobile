@@ -62,7 +62,8 @@ fun NotificationsScreen(
     onNavigateProfile: () -> Unit = {},
     onNavigateNotifications: () -> Unit = {},
     onNavigateContracts: () -> Unit = {},
-    onNavigatePayments: () -> Unit = {}
+    onNavigatePayments: () -> Unit = {},
+    onNavigateMaintenance: () -> Unit = {}
 ) {
     var loading by remember { mutableStateOf(false) }
     val notifications = remember {
@@ -183,7 +184,8 @@ fun NotificationsScreen(
             onNavigateProfile = onNavigateProfile,
             onNavigateNotifications = onNavigateNotifications,
             onNavigateContracts = onNavigateContracts,
-            onNavigatePayments = onNavigatePayments
+            onNavigatePayments = onNavigatePayments,
+            onNavigateMaintenance = onNavigateMaintenance
         )
     }
 }
