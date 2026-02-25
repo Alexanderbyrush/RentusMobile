@@ -1,5 +1,11 @@
 package com.example.rentusmobile.presentation.components
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -36,6 +42,14 @@ fun AppActionButton(
     val pressed by interaction.collectIsPressedAsState()
     val scale = if (pressed) 0.98f else 1f
 
+    val transition = rememberInfiniteTransition(label = "appBtn")
+    val shift by transition.animateFloat(
+        initialValue = -220f,
+        targetValue = 700f,
+        animationSpec = infiniteRepeatable(tween(1700, easing = FastOutSlowInEasing), RepeatMode.Restart),
+        label = "btnShift"
+    )
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -44,7 +58,9 @@ fun AppActionButton(
             .clip(RoundedCornerShape(16.dp))
             .background(
                 Brush.linearGradient(
-                    colors = gradient
+                    colors = gradient,
+                    start = androidx.compose.ui.geometry.Offset(shift, 0f),
+                    end = androidx.compose.ui.geometry.Offset(shift + 240f, 220f)
                 )
             )
             .clickable(interactionSource = interaction, indication = null, onClick = onClick)

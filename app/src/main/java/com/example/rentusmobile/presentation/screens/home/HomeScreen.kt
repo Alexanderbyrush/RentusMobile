@@ -3,10 +3,10 @@ package com.example.rentusmobile.presentation.screens.home
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,7 +45,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -130,40 +129,45 @@ private fun CinematicParticlesBackground() {
     val transition = rememberInfiniteTransition(label = "cinematicParticles")
     val yA by transition.animateFloat(
         initialValue = 0f,
-        targetValue = -1200f,
-        animationSpec = infiniteRepeatable(tween(11000, easing = LinearEasing), RepeatMode.Restart),
+        targetValue = -280f,
+        animationSpec = infiniteRepeatable(tween(12000, easing = LinearEasing), RepeatMode.Restart),
         label = "yA"
     )
     val yB by transition.animateFloat(
         initialValue = 0f,
-        targetValue = -1600f,
+        targetValue = -360f,
         animationSpec = infiniteRepeatable(tween(15000, easing = LinearEasing), RepeatMode.Restart),
         label = "yB"
     )
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        repeat(36) { index ->
-            val size = (2 + (index % 4)).dp
-            Box(
-                modifier = Modifier
-                    .padding(start = (index * 13 % 420).dp, top = (900 + index * 29).dp + yA.dp)
-                    .size(size)
-                    .clip(CircleShape)
-                    .background(if (index % 3 == 0) Color(0x66DA9C5F) else Color(0x33F6D2A5))
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        val w = size.width
+        val h = size.height
+
+        repeat(24) { index ->
+            val x = (index * 53f) % w
+            val yBase = ((index * 97f) % h) + 120f
+            val y = (yBase + yA).let { if (it < -40f) it + h + 200f else it }
+            drawCircle(
+                color = if (index % 3 == 0) Color(0x66DA9C5F) else Color(0x33F6D2A5),
+                radius = (2f + (index % 4)),
+                center = androidx.compose.ui.geometry.Offset(x, y)
             )
         }
-        repeat(24) { index ->
-            val size = (1 + (index % 3)).dp
-            Box(
-                modifier = Modifier
-                    .padding(start = (index * 17 % 420).dp, top = (1200 + index * 36).dp + yB.dp)
-                    .size(size)
-                    .clip(CircleShape)
-                    .background(Color.White.copy(alpha = 0.18f))
+
+        repeat(16) { index ->
+            val x = (index * 71f + 32f) % w
+            val yBase = ((index * 113f) % h) + 180f
+            val y = (yBase + yB).let { if (it < -40f) it + h + 240f else it }
+            drawCircle(
+                color = Color.White.copy(alpha = 0.18f),
+                radius = (1.4f + (index % 3)),
+                center = androidx.compose.ui.geometry.Offset(x, y)
             )
         }
     }
 }
+
 
 @Composable
 private fun HeroSection() {
@@ -292,12 +296,11 @@ private fun SearchInput(label: String, modifier: Modifier = Modifier) {
 @Composable
 private fun PropertiesSection(properties: List<DemoProperty>, onNavigateProperties: () -> Unit) {
     Column(modifier = Modifier.padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        AnimatedHeading("Propiedades destacadas", style = TextStyle(fontSize = 26.sp))
+        Text("Propiedades destacadas", style = TextStyle(fontSize = 26.sp, fontWeight = FontWeight.Bold), color = Color.White)
         Text("Cartas con borde iluminado y volumen para una experiencia premium.", color = Color(0xFFE8DAC8))
 
-        properties.forEachIndexed { index, property ->
-            val cardScale by animateFloatAsState(targetValue = 1f, label = "cardScale$index")
-            GlowingSurface(modifier = Modifier.fillMaxWidth().scale(cardScale), corner = 18.dp) {
+        properties.forEach { property ->
+            GlowingSurface(modifier = Modifier.fillMaxWidth(), corner = 18.dp) {
                 Card(
                     shape = RoundedCornerShape(18.dp),
                     colors = CardDefaults.cardColors(containerColor = Color(0xFF1B130F)),
@@ -387,7 +390,7 @@ private fun CtaSection(onNavigateProperties: () -> Unit) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFC8A97E), modifier = Modifier.size(32.dp))
                 Spacer(modifier = Modifier.height(8.dp))
-                AnimatedHeading("¿Listo para encontrar tu próximo hogar?", style = TextStyle(fontSize = 22.sp))
+                Text("¿Listo para encontrar tu próximo hogar?", style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Bold), color = Color.White)
                 Spacer(modifier = Modifier.height(8.dp))
                 Text("Explora todas las propiedades o comunícate con nuestro equipo.", color = Color.White.copy(alpha = 0.9f))
                 Spacer(modifier = Modifier.height(14.dp))
