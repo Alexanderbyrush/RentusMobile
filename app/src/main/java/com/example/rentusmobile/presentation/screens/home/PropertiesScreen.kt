@@ -105,7 +105,10 @@ fun PropertiesScreen(
     onNavigateMyRequests: () -> Unit = {},
     onNavigateRequests: () -> Unit = {},
     onNavigateMyReports: () -> Unit = {},
-    onNavigateSettings: () -> Unit = {}
+    onNavigateSettings: () -> Unit = {},
+    onNavigatePropertyCreate: () -> Unit = {},
+    onNavigatePropertyDetail: () -> Unit = {},
+    onNavigatePropertyEdit: () -> Unit = {}
 ) {
     var query by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todas") }
@@ -167,6 +170,28 @@ fun PropertiesScreen(
                 ) {
                     item { HeroBlock() }
                     item {
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            AppActionButton(
+                                text = "Crear",
+                                onClick = onNavigatePropertyCreate,
+                                modifier = Modifier.weight(1f),
+                                gradient = listOf(Color(0xFFDA9C5F), Color(0xFFB8791F), Color(0xFFDA9C5F))
+                            )
+                            AppActionButton(
+                                text = "Detalle",
+                                onClick = onNavigatePropertyDetail,
+                                modifier = Modifier.weight(1f),
+                                gradient = listOf(Color(0xFF6366F1), Color(0xFF4F46E5), Color(0xFF6366F1))
+                            )
+                            AppActionButton(
+                                text = "Editar",
+                                onClick = onNavigatePropertyEdit,
+                                modifier = Modifier.weight(1f),
+                                gradient = listOf(Color(0xFF22C55E), Color(0xFF16A34A), Color(0xFF22C55E))
+                            )
+                        }
+                    }
+                    item {
                         PropertyCarousel(
                             title = featured[carouselIndex],
                             index = carouselIndex,
@@ -224,7 +249,7 @@ fun PropertiesScreen(
                                     visible = true,
                                     enter = fadeIn(initialAlpha = 0.22f) + scaleIn(initialScale = 0.9f)
                                 ) {
-                                    PropertyCard(property = property, index = index)
+                                    PropertyCard(property = property, index = index, onClick = onNavigatePropertyDetail)
                                 }
                             }
                         }
@@ -271,9 +296,9 @@ private fun HeroBlock() {
                 Spacer(modifier = Modifier.width(6.dp))
                 Text("Colección 2026", color = Color(0xFFDA9C5F), fontWeight = FontWeight.Bold)
             }
-            AnimatedHeading("Propiedades que parecen de otro nivel", style = TextStyle(fontSize = 30.sp, lineHeight = 32.sp))
+            AnimatedHeading("Propiedades 2026 • Motion UI", style = TextStyle(fontSize = 30.sp, lineHeight = 32.sp))
             Text(
-                "Explora una experiencia más cinematográfica: cards vivas, navegación fluida y visual premium.",
+                "Explora un look futurista: microanimaciones, brillo premium y flujo directo a crear/detalle/edición.",
                 color = Color(0xFFE8DAC8),
                 fontSize = 13.sp
             )
@@ -356,13 +381,13 @@ private fun GlassArrow(icon: androidx.compose.ui.graphics.vector.ImageVector, on
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun PropertyCard(property: PropertyCardItem, index: Int) {
+private fun PropertyCard(property: PropertyCardItem, index: Int, onClick: () -> Unit) {
     val entryScale by animateFloatAsState(targetValue = 1f, animationSpec = tween(450 + index * 60, easing = FastOutSlowInEasing), label = "card$index")
 
     Card(
         colors = CardDefaults.cardColors(containerColor = Color(0xFF1E140F)),
         shape = RoundedCornerShape(16.dp),
-        modifier = Modifier.scale(entryScale)
+        modifier = Modifier.scale(entryScale).clickable { onClick() }
     ) {
         Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Box(

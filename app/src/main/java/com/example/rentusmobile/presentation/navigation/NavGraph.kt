@@ -20,6 +20,9 @@ import com.example.rentusmobile.presentation.screens.home.PaymentsScreen
 import com.example.rentusmobile.presentation.screens.home.ProfileScreen
 import com.example.rentusmobile.presentation.screens.home.PropertiesScreen
 import com.example.rentusmobile.presentation.screens.home.SettingsScreen
+import com.example.rentusmobile.presentation.screens.home.PropertyCreateScreen
+import com.example.rentusmobile.presentation.screens.home.PropertyDetailScreen
+import com.example.rentusmobile.presentation.screens.home.PropertyEditScreen
 
 sealed class Screen(val route: String) {
     data object Login : Screen("login")
@@ -36,6 +39,9 @@ sealed class Screen(val route: String) {
     data object Requests : Screen("requests")
     data object MyReports : Screen("my_reports")
     data object Settings : Screen("settings")
+    data object PropertyCreate : Screen("property_create")
+    data object PropertyDetail : Screen("property_detail")
+    data object PropertyEdit : Screen("property_edit")
 }
 
 @Composable
@@ -134,7 +140,10 @@ fun NavGraph(
                 onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
                 onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
-                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) }
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) },
+                onNavigatePropertyCreate = { navigateSingleTop(Screen.PropertyCreate.route) },
+                onNavigatePropertyDetail = { navigateSingleTop(Screen.PropertyDetail.route) },
+                onNavigatePropertyEdit = { navigateSingleTop(Screen.PropertyEdit.route) }
             )
         }
 
@@ -288,6 +297,60 @@ fun NavGraph(
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
                 onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
                 onNavigateSettings = {}
+            )
+        }
+
+        composable(Screen.PropertyCreate.route) {
+            PropertyCreateScreen(
+                onNavigateHome = { navigateToRootTab(Screen.Home.route) },
+                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) },
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) },
+                onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
+                onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
+                onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) },
+                onBackToProperties = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.PropertyDetail.route) {
+            PropertyDetailScreen(
+                onNavigateHome = { navigateToRootTab(Screen.Home.route) },
+                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) },
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) },
+                onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
+                onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
+                onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) },
+                onNavigateEdit = { navigateSingleTop(Screen.PropertyEdit.route) }
+            )
+        }
+
+        composable(Screen.PropertyEdit.route) {
+            PropertyEditScreen(
+                onNavigateHome = { navigateToRootTab(Screen.Home.route) },
+                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) },
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) },
+                onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
+                onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
+                onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) },
+                onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
+                onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
+                onNavigateSettings = { navigateToRootTab(Screen.Settings.route) },
+                onBackToDetail = { navController.popBackStack() }
             )
         }
 
