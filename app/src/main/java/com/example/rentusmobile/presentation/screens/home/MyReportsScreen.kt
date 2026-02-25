@@ -56,7 +56,8 @@ fun MyReportsScreen(
     onNavigateMaintenance: () -> Unit = {},
     onNavigateMyRequests: () -> Unit = {},
     onNavigateRequests: () -> Unit = {},
-    onNavigateMyReports: () -> Unit = {}
+    onNavigateMyReports: () -> Unit = {},
+    onNavigateSettings: () -> Unit = {}
 ) {
     var showCreate by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
@@ -142,7 +143,8 @@ fun MyReportsScreen(
             onNavigateMaintenance = onNavigateMaintenance,
             onNavigateMyRequests = onNavigateMyRequests,
             onNavigateRequests = onNavigateRequests,
-            onNavigateMyReports = onNavigateMyReports
+            onNavigateMyReports = onNavigateMyReports,
+            onNavigateSettings = onNavigateSettings
         )
     }
 }

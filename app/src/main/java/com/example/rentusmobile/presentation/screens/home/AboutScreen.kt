@@ -55,7 +55,8 @@ fun AboutScreen(
     onNavigateMaintenance: () -> Unit = {},
     onNavigateMyRequests: () -> Unit = {},
     onNavigateRequests: () -> Unit = {},
-    onNavigateMyReports: () -> Unit = {}
+    onNavigateMyReports: () -> Unit = {},
+    onNavigateSettings: () -> Unit = {}
 ) {
     AnimatedBackground(
         colors = listOf(Color(0xFF1A0E0A), Color(0xFF2E1D17), Color(0xFF3B2416)),

@@ -71,7 +71,8 @@ fun MyRequestsScreen(
     onNavigateMaintenance: () -> Unit = {},
     onNavigateMyRequests: () -> Unit = {},
     onNavigateRequests: () -> Unit = {},
-    onNavigateMyReports: () -> Unit = {}
+    onNavigateMyReports: () -> Unit = {},
+    onNavigateSettings: () -> Unit = {}
 ) {
     var loading by remember { mutableStateOf(false) }
     val requests = remember {
@@ -190,7 +191,8 @@ fun MyRequestsScreen(
             onNavigateMaintenance = onNavigateMaintenance,
             onNavigateMyRequests = onNavigateMyRequests,
             onNavigateRequests = onNavigateRequests,
-            onNavigateMyReports = onNavigateMyReports
+            onNavigateMyReports = onNavigateMyReports,
+            onNavigateSettings = onNavigateSettings
         )
     }
 }
