@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.rentusmobile.presentation.components.AnimatedHeading
 import com.example.rentusmobile.presentation.components.AppActionButton
 import com.example.rentusmobile.presentation.components.HomeNavbar
 
@@ -92,7 +93,7 @@ fun NotificationsScreen(
                         Icon(Icons.Default.Notifications, contentDescription = null, tint = Color.White)
                     }
                     Column(modifier = Modifier.weight(1f)) {
-                        Text("Notificaciones", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 22.sp)
+                        AnimatedHeading("Notificaciones", style = androidx.compose.ui.text.TextStyle(fontSize = 22.sp), gradientColors = listOf(Color(0xFFFFF4E8), Color(0xFFF6D2A5), Color(0xFFDA9C5F)), durationMillis = 2800)
                         Text("$unreadCount sin leer", color = Color.White.copy(alpha = 0.9f), fontSize = 12.sp)
                     }
                     if (unreadCount > 0) {

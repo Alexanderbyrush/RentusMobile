@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.rentusmobile.presentation.components.AnimatedHeading
 import com.example.rentusmobile.presentation.components.AppActionButton
 import com.example.rentusmobile.presentation.components.HomeNavbar
 
@@ -82,7 +83,7 @@ fun PaymentsScreen(
                     }
                     Spacer(modifier = Modifier.width(10.dp))
                     Column {
-                        Text("Pagos", color = Color(0xFFF0E5DB), fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
+                        AnimatedHeading("Pagos", style = androidx.compose.ui.text.TextStyle(fontSize = 28.sp), gradientColors = listOf(Color(0xFFFFF4E8), Color(0xFFF6D2A5), Color(0xFFDA9C5F)), durationMillis = 2800)
                         Text("Historial y estado de tus pagos", color = Color(0xFFD4C5B9), fontSize = 12.sp)
                     }
                 }

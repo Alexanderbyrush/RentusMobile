@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.rentusmobile.R
+import com.example.rentusmobile.presentation.components.AnimatedHeading
 import com.example.rentusmobile.presentation.components.AppActionButton
 import com.example.rentusmobile.presentation.components.HomeNavbar
 import androidx.compose.ui.res.painterResource
@@ -76,7 +77,7 @@ fun ContractsScreen(
             modifier = Modifier.fillMaxSize().padding(bottom = 84.dp).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 18.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            Text("Contratos", color = Color(0xFFF0E5DB), fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
+            AnimatedHeading("Contratos", style = androidx.compose.ui.text.TextStyle(fontSize = 30.sp), gradientColors = listOf(Color(0xFFFFF2E0), Color(0xFFF6D2A5), Color(0xFFDA9C5F)), durationMillis = 2800)
             Text("Gestiona y revisa tus contratos con animaciones y acciones rápidas.", color = Color(0xFFD4C5B9), fontSize = 13.sp)
 
             contracts.forEachIndexed { index, contract ->

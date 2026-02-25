@@ -144,7 +144,7 @@ private fun CinematicParticlesBackground() {
         val w = size.width
         val h = size.height
 
-        repeat(24) { index ->
+        repeat(84) { index ->
             val x = (index * 53f) % w
             val yBase = ((index * 97f) % h) + 120f
             val y = (yBase + yA).let { if (it < -40f) it + h + 200f else it }
@@ -155,7 +155,7 @@ private fun CinematicParticlesBackground() {
             )
         }
 
-        repeat(16) { index ->
+        repeat(56) { index ->
             val x = (index * 71f + 32f) % w
             val yBase = ((index * 113f) % h) + 180f
             val y = (yBase + yB).let { if (it < -40f) it + h + 240f else it }
