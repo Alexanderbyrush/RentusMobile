@@ -73,7 +73,7 @@ fun AboutScreen(
                 verticalArrangement = Arrangement.spacedBy(18.dp)
             ) {
                 AboutSection(0) {
-                    Text("Sobre Rentus", color = Color(0xFFC9915C), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                    AnimatedHeading("Sobre Rentus", style = TextStyle(fontSize = 14.sp), gradientColors = listOf(Color(0xFFFFE7C7), Color(0xFFC9915C), Color(0xFF8B5E34)), durationMillis = 2600)
                     AnimatedHeading(
                         "Una nueva forma\nde encontrar hogar.",
                         style = TextStyle(fontSize = 40.sp, lineHeight = 42.sp)

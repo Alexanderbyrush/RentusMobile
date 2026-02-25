@@ -69,7 +69,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -326,7 +325,7 @@ private fun PropertyCarousel(title: String, index: Int, count: Int, onPrev: () -
                 Spacer(modifier = Modifier.width(4.dp))
                 Text("Featured Drop", color = Color(0xFFF6D2A5), fontWeight = FontWeight.Bold, fontSize = 12.sp)
             }
-            Text(title, color = Color.White, fontWeight = FontWeight.ExtraBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            AnimatedHeading(title, style = TextStyle(fontSize = 18.sp), gradientColors = listOf(Color(0xFFFFF7EE), Color(0xFFF6D2A5), Color(0xFFDA9C5F)), durationMillis = 3100)
             Text("${index + 1} / $count", color = Color.White.copy(alpha = 0.9f), fontSize = 12.sp)
         }
 
@@ -395,7 +394,7 @@ private fun PropertyCard(property: PropertyCardItem, index: Int) {
                 )
             }
 
-            Text(property.title, fontWeight = FontWeight.Bold, color = Color(0xFFF6EEE4), maxLines = 1)
+            AnimatedHeading(property.title, style = TextStyle(fontSize = 16.sp), gradientColors = listOf(Color(0xFFFFF4E8), Color(0xFFF6D2A5), Color(0xFFDA9C5F)), durationMillis = 3000)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color(0xFFDA9C5F), modifier = Modifier.size(14.dp))
                 Text(property.city, color = Color(0xFFBCA99A), fontSize = 12.sp)

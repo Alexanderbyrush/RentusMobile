@@ -206,7 +206,7 @@ fun ProfileScreen(
                 colors = CardDefaults.cardColors(containerColor = Color(0x12FFFFFF))
             ) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("Mis Propiedades", color = Color(0xFFF0E5DB), fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    AnimatedHeading("Mis Propiedades", style = TextStyle(fontSize = 20.sp), gradientColors = listOf(Color(0xFFFFF4E8), Color(0xFFF6D2A5), Color(0xFFDA9C5F)), durationMillis = 2800)
                     properties.forEachIndexed { index, (title, price, status) ->
                         val scale by animateFloatAsState(
                             targetValue = 1f,
@@ -236,7 +236,7 @@ fun ProfileScreen(
                                     verticalAlignment = Alignment.Top
                                 ) {
                                     Column(modifier = Modifier.weight(1f)) {
-                                        Text(title, color = Color.White, fontWeight = FontWeight.Bold)
+                                        AnimatedHeading(title, style = TextStyle(fontSize = 16.sp), gradientColors = listOf(Color(0xFFFFF4E8), Color(0xFFF6D2A5), Color(0xFFDA9C5F)), durationMillis = 3000)
                                         Text(price, color = Color(0xFF2ECC71), fontWeight = FontWeight.ExtraBold)
                                     }
                                     Text(
