@@ -107,7 +107,7 @@ fun MyRequestsScreen(
                     Spacer(modifier = Modifier.width(12.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         AnimatedHeading("Mis Solicitudes", style = androidx.compose.ui.text.TextStyle(fontSize = 24.sp), gradientColors = listOf(Color(0xFFFFF4E8), Color(0xFFF6D2A5), Color(0xFFDA9C5F)), durationMillis = 2800)
-                        Text("Gestiona visitas y respuestas", color = Color.White.copy(alpha = 0.9f), fontSize = 12.sp)
+                        Text("Seguimiento de tus solicitudes como inquilino", color = Color.White.copy(alpha = 0.9f), fontSize = 12.sp)
                     }
                 }
             }

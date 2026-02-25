@@ -106,8 +106,8 @@ fun RequestsScreen(
                     ) { Icon(Icons.Default.Home, contentDescription = null, tint = Color.White) }
                     Spacer(modifier = Modifier.width(10.dp))
                     Column {
-                        AnimatedHeading("Solicitudes", style = TextStyle(fontSize = 24.sp), gradientColors = listOf(Color(0xFFFFF4E8), Color(0xFFF6D2A5), Color(0xFFDA9C5F)), durationMillis = 2800)
-                        Text("Solicitudes recibidas como dueño", color = Color.White.copy(alpha = 0.9f), fontSize = 12.sp)
+                        AnimatedHeading("Solicitudes (Dueño)", style = TextStyle(fontSize = 24.sp), gradientColors = listOf(Color(0xFFFFF4E8), Color(0xFFF6D2A5), Color(0xFFDA9C5F)), durationMillis = 2800)
+                        Text("Administra visitas recibidas para tus propiedades", color = Color.White.copy(alpha = 0.9f), fontSize = 12.sp)
                     }
                 }
             }

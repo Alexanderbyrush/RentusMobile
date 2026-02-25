@@ -85,7 +85,7 @@ fun HomeNavbar(
         Triple("Contratos", Icons.Default.Apartment, onNavigateContracts),
         Triple("Pagos", Icons.Default.Payments, onNavigatePayments),
         Triple("Mantenimiento", Icons.Default.Build, onNavigateMaintenance),
-        Triple("Solicitudes", Icons.Default.Description, onNavigateRequests),
+        Triple("Solicitudes (Dueño)", Icons.Default.Description, onNavigateRequests),
         Triple("Mis Solicitudes", Icons.Default.Sms, onNavigateMyRequests),
         Triple("Mis Reportes", Icons.Default.Flag, onNavigateMyReports),
         Triple("Ajustes", Icons.Default.Settings, {})
