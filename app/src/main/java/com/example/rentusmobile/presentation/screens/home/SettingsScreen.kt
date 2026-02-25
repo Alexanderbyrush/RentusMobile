@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Language
@@ -54,7 +53,7 @@ private enum class SettingsSection(val label: String, val icon: ImageVector) {
     Preferences("Preferencias", Icons.Default.Tune)
 }
 
-private data class NotificationItem(val title: String, val description: String, var enabled: Boolean)
+private data class SettingsNotificationItem(val title: String, val description: String, var enabled: Boolean)
 
 @Composable
 fun SettingsScreen(
@@ -87,10 +86,10 @@ fun SettingsScreen(
 
     val notifications = remember {
         mutableStateListOf(
-            NotificationItem("Nuevas solicitudes", "Avisarme cuando llegue una solicitud nueva", true),
-            NotificationItem("Recordatorios de pago", "Avisarme 48h antes de vencimientos", true),
-            NotificationItem("Mensajes", "Notificar nuevos mensajes del chat", true),
-            NotificationItem("Resumen semanal", "Enviar reporte semanal por email", false)
+            SettingsNotificationItem("Nuevas solicitudes", "Avisarme cuando llegue una solicitud nueva", true),
+            SettingsNotificationItem("Recordatorios de pago", "Avisarme 48h antes de vencimientos", true),
+            SettingsNotificationItem("Mensajes", "Notificar nuevos mensajes del chat", true),
+            SettingsNotificationItem("Resumen semanal", "Enviar reporte semanal por email", false)
         )
     }
 
