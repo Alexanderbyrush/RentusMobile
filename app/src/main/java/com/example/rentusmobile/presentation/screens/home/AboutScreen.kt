@@ -50,7 +50,8 @@ fun AboutScreen(
     onNavigateProperties: () -> Unit,
     onNavigateProfile: () -> Unit = {},
     onNavigateNotifications: () -> Unit = {},
-    onNavigateContracts: () -> Unit = {}
+    onNavigateContracts: () -> Unit = {},
+    onNavigatePayments: () -> Unit = {}
 ) {
     AnimatedBackground(
         colors = listOf(Color(0xFF1A0E0A), Color(0xFF2E1D17), Color(0xFF3B2416)),
@@ -114,7 +115,8 @@ fun AboutScreen(
                 onNavigateAbout = {},
                 onNavigateProfile = onNavigateProfile,
                 onNavigateNotifications = onNavigateNotifications,
-                onNavigateContracts = onNavigateContracts
+                onNavigateContracts = onNavigateContracts,
+                onNavigatePayments = onNavigatePayments
             )
         }
     }

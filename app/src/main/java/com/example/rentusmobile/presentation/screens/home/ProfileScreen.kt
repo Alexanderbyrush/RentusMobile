@@ -70,7 +70,8 @@ fun ProfileScreen(
     onNavigateAbout: () -> Unit,
     onNavigateProfile: () -> Unit = {},
     onNavigateNotifications: () -> Unit = {},
-    onNavigateContracts: () -> Unit = {}
+    onNavigateContracts: () -> Unit = {},
+    onNavigatePayments: () -> Unit = {}
 ) {
     val stats = remember {
         listOf("12" to "Propiedades", "98%" to "Respuesta", "4.9" to "Rating")
@@ -284,7 +285,8 @@ fun ProfileScreen(
             onNavigateAbout = onNavigateAbout,
             onNavigateProfile = onNavigateProfile,
             onNavigateNotifications = onNavigateNotifications,
-            onNavigateContracts = onNavigateContracts
+            onNavigateContracts = onNavigateContracts,
+            onNavigatePayments = onNavigatePayments
         )
     }
 }

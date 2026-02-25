@@ -89,7 +89,8 @@ fun PropertiesScreen(
     onNavigateAbout: () -> Unit = {},
     onNavigateProfile: () -> Unit = {},
     onNavigateNotifications: () -> Unit = {},
-    onNavigateContracts: () -> Unit = {}
+    onNavigateContracts: () -> Unit = {},
+    onNavigatePayments: () -> Unit = {}
 ) {
     var query by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todas") }
@@ -220,7 +221,8 @@ fun PropertiesScreen(
                 onNavigateAbout = onNavigateAbout,
                 onNavigateProfile = onNavigateProfile,
                 onNavigateNotifications = onNavigateNotifications,
-                onNavigateContracts = onNavigateContracts
+                onNavigateContracts = onNavigateContracts,
+                onNavigatePayments = onNavigatePayments
             )
         }
     }
