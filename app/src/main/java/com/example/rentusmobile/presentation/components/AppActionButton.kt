@@ -37,7 +37,7 @@ fun AppActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     contentColor: Color = Color.White,
-    gradient: List<Color> = listOf(Color(0xFF3B251D), Color(0xFF5A3728), Color(0xFFDA9C5F)),
+    gradient: List<Color> = listOf(Color(0xFF2A1B5F), Color(0xFF6B3FC9), Color(0xFF16B8C9), Color(0xFF9D7BFF)),
     paddingValues: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
     animationSeed: Int = text.hashCode()
 ) {
@@ -45,14 +45,14 @@ fun AppActionButton(
     val pressed by interaction.collectIsPressedAsState()
     val scale = if (pressed) 0.98f else 1f
 
-    val phaseOffset = remember(animationSeed) { kotlin.math.abs(animationSeed % 1800) }
+    val phaseOffset = remember(animationSeed) { kotlin.math.abs(animationSeed % 3000) }
     val transition = rememberInfiniteTransition(label = "appBtn")
     val shift by transition.animateFloat(
-        initialValue = -220f,
+        initialValue = -260f,
         targetValue = 760f,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart,
+            repeatMode = RepeatMode.Reverse,
             initialStartOffset = StartOffset(phaseOffset, StartOffsetType.FastForward)
         ),
         label = "btnShift"
