@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +18,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,8 +33,6 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -43,19 +41,20 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.rentusmobile.R
 import com.example.rentusmobile.presentation.components.AnimatedHeading
 import com.example.rentusmobile.presentation.components.AppActionButton
 import com.example.rentusmobile.presentation.components.HomeNavbar
@@ -84,18 +83,18 @@ fun HomeScreen(
 ) {
     val properties = remember {
         listOf(
-            DemoProperty("Apartamento Premium", "Bogotá", "$2.500.000", "95m²", "3", "2", "Disponible"),
-            DemoProperty("Casa Moderna Familiar", "Medellín", "$3.100.000", "140m²", "4", "3", "Disponible"),
-            DemoProperty("Loft Ejecutivo", "Cali", "$1.900.000", "70m²", "2", "1", "Mantenimiento")
+            DemoProperty("Penthouse Sky Lounge", "Bogotá", "$6.200.000", "220m²", "4", "4", "Disponible"),
+            DemoProperty("Casa Forest Minimal", "Medellín", "$4.700.000", "260m²", "4", "4", "Top"),
+            DemoProperty("Loft Neon District", "Cali", "$3.100.000", "92m²", "2", "2", "Nuevo")
         )
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFAFAFA))
+            .background(Brush.linearGradient(listOf(Color(0xFF0D0A09), Color(0xFF241711), Color(0xFF3B251D))))
     ) {
-        ParticlesBackground()
+        CinematicParticlesBackground()
 
         Column(
             modifier = Modifier
@@ -127,29 +126,40 @@ fun HomeScreen(
 }
 
 @Composable
-private fun ParticlesBackground() {
-    val transition = rememberInfiniteTransition(label = "particles")
-    val yShift = transition.animateFloat(
+private fun CinematicParticlesBackground() {
+    val transition = rememberInfiniteTransition(label = "cinematicParticles")
+    val yA by transition.animateFloat(
         initialValue = 0f,
-        targetValue = -1400f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(12000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "yShift"
+        targetValue = -1200f,
+        animationSpec = infiniteRepeatable(tween(11000, easing = LinearEasing), RepeatMode.Restart),
+        label = "yA"
+    )
+    val yB by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = -1600f,
+        animationSpec = infiniteRepeatable(tween(15000, easing = LinearEasing), RepeatMode.Restart),
+        label = "yB"
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
-        repeat(20) { index ->
-            val size = (8 + (index % 4) * 6).dp
+        repeat(85) { index ->
+            val size = (2 + (index % 4)).dp
             Box(
                 modifier = Modifier
-                    .offset(x = (index * 17).dp, y = (1300 + index * 60).dp + yShift.value.dp)
+                    .padding(start = (index * 13 % 420).dp, top = (900 + index * 29).dp + yA.dp)
                     .size(size)
                     .clip(CircleShape)
-                    .background(
-                        Brush.linearGradient(listOf(Color(0xFF3B251D).copy(alpha = 0.18f), Color(0xFF8B6F47).copy(alpha = 0.12f)))
-                    )
+                    .background(if (index % 3 == 0) Color(0x66DA9C5F) else Color(0x33F6D2A5))
+            )
+        }
+        repeat(65) { index ->
+            val size = (1 + (index % 3)).dp
+            Box(
+                modifier = Modifier
+                    .padding(start = (index * 17 % 420).dp, top = (1200 + index * 36).dp + yB.dp)
+                    .size(size)
+                    .clip(CircleShape)
+                    .background(Color.White.copy(alpha = 0.18f))
             )
         }
     }
@@ -157,64 +167,71 @@ private fun ParticlesBackground() {
 
 @Composable
 private fun HeroSection() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Brush.linearGradient(listOf(Color(0xFF2E1D17), Color(0xFF3B251D), Color(0xFF4D2F24))))
-            .padding(horizontal = 24.dp, vertical = 28.dp)
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            Row(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(50))
-                    .background(Color.White.copy(alpha = 0.12f))
-                    .padding(horizontal = 14.dp, vertical = 6.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFC8A97E), modifier = Modifier.size(14.dp))
-                Spacer(modifier = Modifier.width(6.dp))
-                Text("Propiedades destacadas", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-            }
-
-            AnimatedHeading(
-                text = "Encuentra tu hogar ideal\nen RentUs",
-                style = TextStyle(fontSize = 34.sp, lineHeight = 36.sp)
-            )
-
-            Text(
-                text = "Explora inmuebles exclusivos, compara precios y agenda visitas fácilmente desde un solo lugar.",
-                color = Color(0xFFEFE8DD).copy(alpha = 0.92f),
-                fontSize = 15.sp
-            )
-
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                StatChip("1,200+", "Propiedades", Icons.Default.Home)
-                StatChip("980+", "Clientes", Icons.Default.CheckCircle)
-                StatChip("1+", "Año", Icons.Default.Star)
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(170.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color.White.copy(alpha = 0.08f))
-                    .clickable { },
-                contentAlignment = Alignment.Center
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Default.Map, contentDescription = null, tint = Color.White, modifier = Modifier.size(34.dp))
-                    Text("Explorar en mapa", color = Color.White, fontWeight = FontWeight.SemiBold)
+    GlowingSurface(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp), corner = 24.dp) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Brush.linearGradient(listOf(Color(0xFF2E1D17), Color(0xFF3B251D), Color(0xFF4D2F24))))
+                .padding(horizontal = 22.dp, vertical = 24.dp)
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(50))
+                        .background(Color.White.copy(alpha = 0.12f))
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFC8A97E), modifier = Modifier.size(14.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("Modo Cinemático 2026", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                 }
+
+                AnimatedHeading(
+                    text = "El hogar que sueñas\nse ve así de brutal",
+                    style = TextStyle(fontSize = 34.sp, lineHeight = 36.sp)
+                )
+
+                Text(
+                    text = "Experiencia inmersiva con cards iluminadas, navegación premium y propiedades de otro nivel.",
+                    color = Color(0xFFEFE8DD).copy(alpha = 0.92f),
+                    fontSize = 14.sp
+                )
+
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    StatChip("1,200+", "Propiedades", Icons.Default.Home)
+                    StatChip("980+", "Clientes", Icons.Default.CheckCircle)
+                    StatChip("5⭐", "Rating", Icons.Default.Star)
+                }
+
                 Box(
                     modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(10.dp)
-                        .clip(RoundedCornerShape(50))
-                        .background(Color.White.copy(alpha = 0.2f))
-                        .padding(horizontal = 10.dp, vertical = 5.dp)
+                        .fillMaxWidth()
+                        .height(170.dp)
+                        .clip(RoundedCornerShape(18.dp))
+                        .clickable { }
                 ) {
-                    Text("En vivo", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    Image(
+                        painter = painterResource(id = R.drawable.casa),
+                        contentDescription = "Showcase",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, Color(0xB0000000)))))
+                    Column(modifier = Modifier.align(Alignment.BottomStart).padding(12.dp)) {
+                        Text("Tour en vivo", color = Color(0xFFF6D2A5), fontWeight = FontWeight.Bold)
+                        Text("Explorar en mapa", color = Color.White, fontWeight = FontWeight.SemiBold)
+                    }
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(10.dp)
+                            .clip(RoundedCornerShape(50))
+                            .background(Color.White.copy(alpha = 0.2f))
+                            .padding(horizontal = 10.dp, vertical = 5.dp)
+                    ) {
+                        Text("En vivo", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    }
                 }
             }
         }
@@ -223,10 +240,7 @@ private fun HeroSection() {
 
 @Composable
 private fun StatChip(number: String, label: String, icon: androidx.compose.ui.graphics.vector.ImageVector) {
-    Surface(
-        color = Color.White.copy(alpha = 0.1f),
-        shape = RoundedCornerShape(14.dp)
-    ) {
+    Surface(color = Color.White.copy(alpha = 0.1f), shape = RoundedCornerShape(14.dp)) {
         Row(
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -243,24 +257,22 @@ private fun StatChip(number: String, label: String, icon: androidx.compose.ui.gr
 
 @Composable
 private fun SearchSection() {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-            .offset(y = (-18).dp),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("Buscar propiedades", fontWeight = FontWeight.Bold, color = Color(0xFF2C3E50))
-            SearchInput("Ciudad", Modifier.fillMaxWidth())
-            SearchInput("Tipo", Modifier.fillMaxWidth())
-            AppActionButton(
-                text = "Buscar",
-                onClick = {},
-                gradient = listOf(Color(0xFF3B251D), Color(0xFF2E1D17), Color(0xFF8A5D34))
-            )
+    GlowingSurface(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp).padding(top = 2.dp), corner = 18.dp) {
+        Card(
+            shape = RoundedCornerShape(18.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF17110E)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        ) {
+            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text("Buscar propiedades", fontWeight = FontWeight.Bold, color = Color(0xFFF0E5DB))
+                SearchInput("Ciudad", Modifier.fillMaxWidth())
+                SearchInput("Tipo", Modifier.fillMaxWidth())
+                AppActionButton(
+                    text = "Buscar",
+                    onClick = {},
+                    gradient = listOf(Color(0xFF3B251D), Color(0xFF2E1D17), Color(0xFFDA9C5F))
+                )
+            }
         }
     }
 }
@@ -270,10 +282,10 @@ private fun SearchInput(label: String, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
-            .background(Color(0xFFF9FAFB))
+            .background(Color(0xFF241711))
             .padding(horizontal = 12.dp, vertical = 10.dp)
     ) {
-        Text(label, color = Color(0xFF6B7280), fontSize = 13.sp)
+        Text(label, color = Color(0xFFBFAF9F), fontSize = 13.sp)
     }
 }
 
@@ -281,57 +293,64 @@ private fun SearchInput(label: String, modifier: Modifier = Modifier) {
 private fun PropertiesSection(properties: List<DemoProperty>, onNavigateProperties: () -> Unit) {
     Column(modifier = Modifier.padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         AnimatedHeading("Propiedades destacadas", style = TextStyle(fontSize = 26.sp))
-        Text("Descubre las mejores opciones disponibles para ti.", color = Color(0xFF6B7280))
+        Text("Cartas con borde iluminado y volumen para una experiencia premium.", color = Color(0xFFE8DAC8))
 
         properties.forEachIndexed { index, property ->
             val cardScale by animateFloatAsState(targetValue = 1f, label = "cardScale$index")
-            Card(
-                shape = RoundedCornerShape(18.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-                modifier = Modifier.fillMaxWidth().scale(cardScale)
-            ) {
-                Column {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(170.dp)
-                            .background(Brush.linearGradient(listOf(Color(0xFFDED5C4), Color(0xFFC4B5A0))))
-                    ) {
+            GlowingSurface(modifier = Modifier.fillMaxWidth().scale(cardScale), corner = 18.dp) {
+                Card(
+                    shape = RoundedCornerShape(18.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1B130F)),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                ) {
+                    Column {
                         Box(
                             modifier = Modifier
-                                .padding(10.dp)
-                                .clip(RoundedCornerShape(20.dp))
-                                .background(Color(0xFF27AE60))
-                                .padding(horizontal = 10.dp, vertical = 4.dp)
+                                .fillMaxWidth()
+                                .height(170.dp)
                         ) {
-                            Text(property.status, color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
-                        }
-                    }
-
-                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Column(modifier = Modifier.width(220.dp)) {
-                                Text(property.title, fontWeight = FontWeight.Bold, color = Color(0xFF1F2937), fontSize = 18.sp)
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color(0xFF6B7280), modifier = Modifier.size(14.dp))
-                                    Text(property.city, color = Color(0xFF6B7280), fontSize = 12.sp)
-                                }
+                            Image(
+                                painter = painterResource(id = R.drawable.casa),
+                                contentDescription = property.title,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                            Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, Color(0x77000000)))))
+                            Box(
+                                modifier = Modifier
+                                    .padding(10.dp)
+                                    .clip(RoundedCornerShape(20.dp))
+                                    .background(Color(0xFF27AE60))
+                                    .padding(horizontal = 10.dp, vertical = 4.dp)
+                            ) {
+                                Text(property.status, color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
                             }
-                            Text(property.price, fontWeight = FontWeight.ExtraBold, color = Color(0xFF27AE60), fontSize = 18.sp)
                         }
 
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            FeatureMini(Icons.Default.Apartment, property.area)
-                            FeatureMini(Icons.Default.Bed, property.bedrooms)
-                            FeatureMini(Icons.Default.Bathtub, property.bathrooms)
-                        }
+                        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Column(modifier = Modifier.width(220.dp)) {
+                                    Text(property.title, fontWeight = FontWeight.Bold, color = Color(0xFFF5ECE1), fontSize = 18.sp)
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color(0xFFDA9C5F), modifier = Modifier.size(14.dp))
+                                        Text(property.city, color = Color(0xFFBCA99A), fontSize = 12.sp)
+                                    }
+                                }
+                                Text(property.price, fontWeight = FontWeight.ExtraBold, color = Color(0xFF2ECC71), fontSize = 18.sp)
+                            }
 
-                        AppActionButton(
-                            text = "Ver detalles",
-                            onClick = {},
-                            gradient = listOf(Color(0xFF4D2F24), Color(0xFF5D3A2D), Color(0xFF7A4E3A))
-                        )
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                FeatureMini(Icons.Default.Apartment, property.area)
+                                FeatureMini(Icons.Default.Bed, property.bedrooms)
+                                FeatureMini(Icons.Default.Bathtub, property.bathrooms)
+                            }
+
+                            AppActionButton(
+                                text = "Ver detalles",
+                                onClick = {},
+                                gradient = listOf(Color(0xFF4D2F24), Color(0xFF5D3A2D), Color(0xFFDA9C5F))
+                            )
+                        }
                     }
                 }
             }
@@ -346,44 +365,69 @@ private fun FeatureMini(icon: androidx.compose.ui.graphics.vector.ImageVector, v
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
-            .background(Color(0xFFF9FAFB))
+            .background(Color(0xFF2A1C16))
             .padding(horizontal = 8.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(icon, contentDescription = null, tint = Color(0xFF4B5563), modifier = Modifier.size(13.dp))
+        Icon(icon, contentDescription = null, tint = Color(0xFFDA9C5F), modifier = Modifier.size(13.dp))
         Spacer(modifier = Modifier.width(4.dp))
-        Text(value, fontSize = 12.sp, color = Color(0xFF1F2937), fontWeight = FontWeight.SemiBold)
+        Text(value, fontSize = 12.sp, color = Color(0xFFE7D8C8), fontWeight = FontWeight.SemiBold)
     }
 }
 
 @Composable
 private fun CtaSection(onNavigateProperties: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 22.dp)
-            .clip(RoundedCornerShape(22.dp))
-            .background(Brush.linearGradient(listOf(Color(0xFF2E1D17), Color(0xFF3B251D))))
-            .padding(22.dp)
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFC8A97E), modifier = Modifier.size(32.dp))
-            Spacer(modifier = Modifier.height(8.dp))
-            AnimatedHeading("¿Listo para encontrar tu próximo hogar?", style = TextStyle(fontSize = 22.sp))
-            Spacer(modifier = Modifier.height(8.dp))
-            Text("Explora todas las propiedades o comunícate con nuestro equipo.", color = Color.White.copy(alpha = 0.9f))
-            Spacer(modifier = Modifier.height(14.dp))
-            AppActionButton(
-                text = "Ver propiedades",
-                onClick = onNavigateProperties,
-                contentColor = Color(0xFF3B251D),
-                gradient = listOf(Color(0xFFFFFFFF), Color(0xFFF1E6D7), Color(0xFFFFFFFF))
-            )
-            AppActionButton(
-                text = "Contacto",
-                onClick = {},
-                gradient = listOf(Color(0xFF5A3A2B), Color(0xFF7A513A), Color(0xFF5A3A2B))
-            )
+    GlowingSurface(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 22.dp), corner = 22.dp) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Brush.linearGradient(listOf(Color(0xFF2E1D17), Color(0xFF3B251D))))
+                .padding(22.dp)
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFC8A97E), modifier = Modifier.size(32.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+                AnimatedHeading("¿Listo para encontrar tu próximo hogar?", style = TextStyle(fontSize = 22.sp))
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("Explora todas las propiedades o comunícate con nuestro equipo.", color = Color.White.copy(alpha = 0.9f))
+                Spacer(modifier = Modifier.height(14.dp))
+                AppActionButton(
+                    text = "Ver propiedades",
+                    onClick = onNavigateProperties,
+                    contentColor = Color(0xFF3B251D),
+                    gradient = listOf(Color(0xFFFFFFFF), Color(0xFFF1E6D7), Color(0xFFFFFFFF))
+                )
+            }
         }
+    }
+}
+
+@Composable
+private fun GlowingSurface(
+    modifier: Modifier = Modifier,
+    corner: androidx.compose.ui.unit.Dp,
+    content: @Composable () -> Unit
+) {
+    val transition = rememberInfiniteTransition(label = "glowCard")
+    val shift by transition.animateFloat(
+        initialValue = -240f,
+        targetValue = 620f,
+        animationSpec = infiniteRepeatable(tween(2200, easing = LinearEasing), RepeatMode.Restart),
+        label = "glowShift"
+    )
+
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(corner))
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(Color(0x55DA9C5F), Color(0x229B6C45), Color(0x44F6D2A5), Color(0x33906A49)),
+                    start = androidx.compose.ui.geometry.Offset(shift, 0f),
+                    end = androidx.compose.ui.geometry.Offset(shift + 220f, 220f)
+                )
+            )
+            .padding(1.5.dp)
+    ) {
+        content()
     }
 }
