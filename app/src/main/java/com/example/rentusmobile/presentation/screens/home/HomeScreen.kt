@@ -103,7 +103,7 @@ fun HomeScreen(
         ) {
             HeroSection()
             SearchSection()
-            PropertiesSection(properties, onNavigateProperties)
+            PropertiesSection(properties)
             CtaSection(onNavigateProperties)
             Spacer(modifier = Modifier.height(24.dp))
         }
@@ -297,7 +297,7 @@ private fun SearchInput(label: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun PropertiesSection(properties: List<DemoProperty>, onNavigateProperties: () -> Unit) {
+private fun PropertiesSection(properties: List<DemoProperty>) {
     Column(modifier = Modifier.padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         AnimatedHeading(
             text = "Propiedades destacadas",
@@ -373,7 +373,6 @@ private fun PropertiesSection(properties: List<DemoProperty>, onNavigateProperti
             }
         }
 
-        AppActionButton(text = "Ver todas", onClick = onNavigateProperties, animationSeed = 303)
     }
 }
 

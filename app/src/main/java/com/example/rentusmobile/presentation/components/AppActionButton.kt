@@ -8,11 +8,13 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -58,6 +60,17 @@ fun AppActionButton(
         label = "btnShift"
     )
 
+    val bubblePulse by transition.animateFloat(
+        initialValue = 0.15f,
+        targetValue = 0.45f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 2600, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse,
+            initialStartOffset = StartOffset((phaseOffset / 2), StartOffsetType.FastForward)
+        ),
+        label = "bubblePulse"
+    )
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -75,6 +88,25 @@ fun AppActionButton(
             .padding(paddingValues),
         contentAlignment = Alignment.Center
     ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val localShift = (shift % size.width)
+            val dots = listOf(
+                Triple(0.12f, 0.30f, 3.6f),
+                Triple(0.27f, 0.68f, 2.8f),
+                Triple(0.51f, 0.42f, 3.2f),
+                Triple(0.74f, 0.62f, 2.4f),
+                Triple(0.89f, 0.33f, 3.0f)
+            )
+            dots.forEachIndexed { index, (xSeed, ySeed, r) ->
+                val x = ((size.width * xSeed) + localShift * (0.08f + index * 0.03f)) % size.width
+                val y = size.height * ySeed
+                drawCircle(
+                    color = Color.White.copy(alpha = bubblePulse - (index * 0.04f)),
+                    radius = r,
+                    center = androidx.compose.ui.geometry.Offset(x, y)
+                )
+            }
+        }
         Text(text, color = contentColor, fontWeight = FontWeight.Bold)
     }
 }
