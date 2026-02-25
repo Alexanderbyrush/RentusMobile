@@ -64,7 +64,8 @@ fun HomeNavbar(
     onNavigateNotifications: () -> Unit = {},
     onNavigateContracts: () -> Unit = {},
     onNavigatePayments: () -> Unit = {},
-    onNavigateMaintenance: () -> Unit = {}
+    onNavigateMaintenance: () -> Unit = {},
+    onNavigateMyRequests: () -> Unit = {}
 ) {
     var openMenu by remember { mutableStateOf(false) }
 
@@ -80,7 +81,7 @@ fun HomeNavbar(
         Triple("Contratos", Icons.Default.Apartment, onNavigateContracts),
         Triple("Pagos", Icons.Default.Payments, onNavigatePayments),
         Triple("Mantenimiento", Icons.Default.Build, onNavigateMaintenance),
-        Triple("Mis Solicitudes", Icons.Default.Sms, {}),
+        Triple("Mis Solicitudes", Icons.Default.Sms, onNavigateMyRequests),
         Triple("Ajustes", Icons.Default.Settings, {})
     )
 

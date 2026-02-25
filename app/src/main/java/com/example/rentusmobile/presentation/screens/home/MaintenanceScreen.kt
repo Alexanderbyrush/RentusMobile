@@ -57,7 +57,8 @@ fun MaintenanceScreen(
     onNavigateNotifications: () -> Unit = {},
     onNavigateContracts: () -> Unit = {},
     onNavigatePayments: () -> Unit = {},
-    onNavigateMaintenance: () -> Unit = {}
+    onNavigateMaintenance: () -> Unit = {},
+    onNavigateMyRequests: () -> Unit = {}
 ) {
     var query by remember { mutableStateOf("") }
     val rows = remember {
@@ -145,7 +146,8 @@ fun MaintenanceScreen(
             onNavigateNotifications = onNavigateNotifications,
             onNavigateContracts = onNavigateContracts,
             onNavigatePayments = onNavigatePayments,
-            onNavigateMaintenance = onNavigateMaintenance
+            onNavigateMaintenance = onNavigateMaintenance,
+            onNavigateMyRequests = onNavigateMyRequests
         )
     }
 }

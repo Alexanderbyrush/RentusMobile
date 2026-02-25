@@ -58,7 +58,8 @@ fun ContractsScreen(
     onNavigateNotifications: () -> Unit = {},
     onNavigateContracts: () -> Unit = {},
     onNavigatePayments: () -> Unit = {},
-    onNavigateMaintenance: () -> Unit = {}
+    onNavigateMaintenance: () -> Unit = {},
+    onNavigateMyRequests: () -> Unit = {}
 ) {
     val contracts = remember {
         listOf(
@@ -138,7 +139,8 @@ fun ContractsScreen(
             onNavigateNotifications = onNavigateNotifications,
             onNavigateContracts = onNavigateContracts,
             onNavigatePayments = onNavigatePayments,
-            onNavigateMaintenance = onNavigateMaintenance
+            onNavigateMaintenance = onNavigateMaintenance,
+            onNavigateMyRequests = onNavigateMyRequests
         )
 
         if (showPreview >= 0) {

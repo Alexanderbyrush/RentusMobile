@@ -13,6 +13,7 @@ import com.example.rentusmobile.presentation.screens.home.ContractsScreen
 import com.example.rentusmobile.presentation.screens.home.HomeScreen
 import com.example.rentusmobile.presentation.screens.home.NotificationsScreen
 import com.example.rentusmobile.presentation.screens.home.MaintenanceScreen
+import com.example.rentusmobile.presentation.screens.home.MyRequestsScreen
 import com.example.rentusmobile.presentation.screens.home.PaymentsScreen
 import com.example.rentusmobile.presentation.screens.home.ProfileScreen
 import com.example.rentusmobile.presentation.screens.home.PropertiesScreen
@@ -28,6 +29,7 @@ sealed class Screen(val route: String) {
     data object Contracts : Screen("contracts")
     data object Payments : Screen("payments")
     data object Maintenance : Screen("maintenance")
+    data object MyRequests : Screen("my_requests")
 }
 
 @Composable
@@ -89,7 +91,8 @@ fun NavGraph(
                 onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
-                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) }
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
             )
         }
 
@@ -101,7 +104,8 @@ fun NavGraph(
                 onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
-                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) }
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
             )
         }
 
@@ -114,7 +118,8 @@ fun NavGraph(
                 onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
-                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) }
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
             )
         }
 
@@ -127,7 +132,8 @@ fun NavGraph(
                 onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
-                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) }
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
             )
         }
 
@@ -140,7 +146,8 @@ fun NavGraph(
                 onNavigateNotifications = {},
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
-                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) }
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
             )
         }
 
@@ -153,7 +160,8 @@ fun NavGraph(
                 onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
                 onNavigateContracts = {},
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
-                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) }
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
             )
         }
 
@@ -166,7 +174,8 @@ fun NavGraph(
                 onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = {},
-                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) }
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
             )
         }
 
@@ -179,7 +188,22 @@ fun NavGraph(
                 onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
                 onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
                 onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
-                onNavigateMaintenance = {}
+                onNavigateMaintenance = {},
+                onNavigateMyRequests = { navigateToRootTab(Screen.MyRequests.route) }
+            )
+        }
+
+        composable(Screen.MyRequests.route) {
+            MyRequestsScreen(
+                onNavigateHome = { navigateToRootTab(Screen.Home.route) },
+                onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
+                onNavigateAbout = { navigateToRootTab(Screen.About.route) },
+                onNavigateProfile = { navigateToRootTab(Screen.Profile.route) },
+                onNavigateNotifications = { navigateToRootTab(Screen.Notifications.route) },
+                onNavigateContracts = { navigateToRootTab(Screen.Contracts.route) },
+                onNavigatePayments = { navigateToRootTab(Screen.Payments.route) },
+                onNavigateMaintenance = { navigateToRootTab(Screen.Maintenance.route) },
+                onNavigateMyRequests = {}
             )
         }
     }
