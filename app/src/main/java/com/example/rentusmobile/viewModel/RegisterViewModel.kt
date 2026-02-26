@@ -5,8 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentusmobile.data.models.RegisterData
-import com.example.rentusmobile.data.repository.AuthRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 data class RegisterState(
@@ -29,7 +28,6 @@ data class RegisterState(
 }
 
 class RegisterViewModel(
-    private val authRepository: AuthRepository = AuthRepository()
 ) : ViewModel() {
 
     var state by mutableStateOf(RegisterState())
@@ -80,22 +78,9 @@ class RegisterViewModel(
 
         viewModelScope.launch {
             state = state.copy(isLoading = true, errorMessage = null)
-            val result = authRepository.register(
-                RegisterData(
-                    name = state.name,
-                    email = state.email,
-                    phone = state.phone,
-                    idDocument = state.idDocument,
-                    address = state.address,
-                    password = state.password
-                )
-            )
-            state = if (result.isSuccess) {
-                onSuccess()
-                state.copy(isLoading = false)
-            } else {
-                state.copy(isLoading = false, errorMessage = "No se pudo completar el registro.")
-            }
+            delay(350)
+            onSuccess()
+            state = state.copy(isLoading = false)
         }
     }
 

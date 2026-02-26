@@ -46,13 +46,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalHapticFeedback
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,6 +76,7 @@ fun HomeNavbar(
     onNavigateSettings: () -> Unit = {}
 ) {
     var openMenu by remember { mutableStateOf(false) }
+    val haptic = LocalHapticFeedback.current
 
     val quickLinks = listOf(
         Triple("Inicio", Icons.Default.Home, onNavigateHome),
@@ -96,11 +100,12 @@ fun HomeNavbar(
         modifier = modifier
             .fillMaxWidth()
             .height(86.dp)
+            .blur(0.6.dp)
             .background(
                 Brush.verticalGradient(
                     listOf(
-                        Color(0xCC3B251D),
-                        Color(0xD92E1D17)
+                        Color(0xAA3B251D),
+                        Color(0xBF2E1D17)
                     )
                 ),
                 RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
@@ -132,7 +137,10 @@ fun HomeNavbar(
                     Brush.radialGradient(listOf(Color(0xFFDA9C5F), Color(0xFF8A5D34))),
                     CircleShape
                 )
-                .clickable { openMenu = true },
+                .clickable {
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    openMenu = true
+                },
             contentAlignment = Alignment.Center
         ) {
             Icon(Icons.Default.Menu, contentDescription = "Menu", tint = Color.White)
@@ -183,6 +191,7 @@ private fun MorphingNavItem(
     selected: Boolean,
     onClick: () -> Unit
 ) {
+    val haptic = LocalHapticFeedback.current
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
     val scale by animateFloatAsState(
@@ -206,7 +215,14 @@ private fun MorphingNavItem(
     Column(
         modifier = Modifier
             .scale(scale)
-            .clickable(interactionSource = interactionSource, indication = null, onClick = onClick),
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    onClick()
+                }
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

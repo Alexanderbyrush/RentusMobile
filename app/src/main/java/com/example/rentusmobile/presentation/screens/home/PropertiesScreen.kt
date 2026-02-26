@@ -72,11 +72,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rentusmobile.R
 import com.example.rentusmobile.presentation.animation.ShimmerBlock
 import com.example.rentusmobile.presentation.components.AnimatedHeading
 import com.example.rentusmobile.presentation.components.AppActionButton
 import com.example.rentusmobile.presentation.components.HomeNavbar
+import com.example.rentusmobile.utils.Resource
+import com.example.rentusmobile.viewModel.PropertyViewModel
 import kotlinx.coroutines.delay
 
 private data class PropertyCardItem(
@@ -108,27 +111,39 @@ fun PropertiesScreen(
     onNavigateSettings: () -> Unit = {},
     onNavigatePropertyCreate: () -> Unit = {},
     onNavigatePropertyDetail: () -> Unit = {},
-    onNavigatePropertyEdit: () -> Unit = {}
+    onNavigatePropertyEdit: () -> Unit = {},
+    viewModel: PropertyViewModel = viewModel()
 ) {
     var query by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todas") }
     var carouselIndex by remember { mutableIntStateOf(0) }
 
     val filters = remember { listOf("Todas", "Apartamento", "Casa", "Arriendo", "Venta", "Premium") }
-    val featured = remember {
-        listOf(
-            "Penthouse Sky Lounge",
-            "Villa Designer 2026",
-            "Loft Smart Living"
-        )
+    LaunchedEffect(Unit) {
+        viewModel.loadProperties()
     }
-    val properties = remember {
-        listOf(
-            PropertyCardItem("Penthouse Sky Lounge", "Medellín", "$6.200.000 / mes", "220m²", "4 hab", "4 baños", "Disponible", "TOP"),
-            PropertyCardItem("Villa Lake Side", "Rionegro", "$1.250.000.000", "420m²", "5 hab", "6 baños", "Venta", "NEW"),
-            PropertyCardItem("Loft Neon District", "Bogotá", "$3.100.000 / mes", "92m²", "2 hab", "2 baños", "Disponible", "HOT"),
-            PropertyCardItem("Casa Forest Minimal", "Cali", "$4.700.000 / mes", "260m²", "4 hab", "4 baños", "Nuevo", "TREND")
-        )
+
+    val properties = when (val state = viewModel.propertiesState) {
+        is Resource.Success -> state.data.map {
+            PropertyCardItem(
+                title = it.title,
+                city = it.city ?: "Sin ciudad",
+                price = "$${(it.monthlyPrice ?: 0.0).toInt()} / mes",
+                area = "${(it.areaM2 ?: 0.0).toInt()}m²",
+                bedrooms = "${it.numBedrooms ?: 0} hab",
+                bathrooms = "${it.numBathrooms ?: 0} baños",
+                status = it.status ?: "Disponible",
+                badge = if ((it.monthlyPrice ?: 0.0) > 4_000_000) "TOP" else "NEW"
+            )
+        }
+
+        else -> emptyList()
+    }
+
+    val featured = if (properties.isNotEmpty()) {
+        properties.take(3).map { it.title }
+    } else {
+        listOf("Propiedades Rentus", "Cargando catálogo", "Conectando API")
     }
 
     LaunchedEffect(featured.size) {
@@ -138,11 +153,10 @@ fun PropertiesScreen(
         }
     }
 
-    val uiState = when {
-        query.equals("loading", true) -> PropertiesUiState.Loading
-        query.equals("error", true) -> PropertiesUiState.Error
-        query.equals("empty", true) -> PropertiesUiState.Empty
-        else -> PropertiesUiState.Success
+    val uiState = when (val state = viewModel.propertiesState) {
+        Resource.Loading -> PropertiesUiState.Loading
+        is Resource.Error -> PropertiesUiState.Error
+        is Resource.Success -> if (state.data.isEmpty()) PropertiesUiState.Empty else PropertiesUiState.Success
     }
 
     Box(
@@ -155,7 +169,7 @@ fun PropertiesScreen(
         when (uiState) {
             PropertiesUiState.Loading -> LoadingState()
             PropertiesUiState.Error -> CenterInfo("No pudimos cargar las propiedades.") {
-                AppActionButton(text = "Reintentar", onClick = {}, modifier = Modifier.fillMaxWidth(0.52f))
+                AppActionButton(text = "Reintentar", onClick = { viewModel.loadProperties() }, modifier = Modifier.fillMaxWidth(0.52f))
             }
             PropertiesUiState.Empty -> CenterInfo("No encontramos resultados para tu búsqueda.") {
                 Icon(Icons.Default.HourglassBottom, contentDescription = null, tint = Color(0xFFDA9C5F), modifier = Modifier.size(30.dp))

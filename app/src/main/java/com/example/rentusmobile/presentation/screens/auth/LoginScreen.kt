@@ -133,7 +133,7 @@ fun LoginScreen(
 
                         AuthButton(
                             text = "Iniciar Sesión",
-                            enabled = state.isFormValid,
+                            enabled = true,
                             isLoading = state.isLoading,
                             onClick = { viewModel.onLoginClick(onLoginSuccess) }
                         )
