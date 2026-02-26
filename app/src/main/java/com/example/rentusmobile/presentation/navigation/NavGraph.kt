@@ -318,7 +318,7 @@ fun NavGraph(
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
                 onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
                 onNavigateSettings = { navigateToRootTab(Screen.Settings.route) },
-                onBackToProperties = { navController.popBackStack() }
+                onNavigateBack = { navController.popBackStack() }
             )
         }
 
