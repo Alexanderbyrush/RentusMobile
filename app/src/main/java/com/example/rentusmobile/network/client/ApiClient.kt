@@ -2,6 +2,7 @@ package com.example.rentusmobile.network.client
 
 import android.content.Context
 import com.example.rentusmobile.network.api.AuthApi
+import com.example.rentusmobile.network.api.PropertyApi
 import com.example.rentusmobile.network.interceptor.AuthInterceptor
 import com.example.rentusmobile.network.interceptor.TokenRefreshInterceptor
 import com.example.rentusmobile.network.utils.TokenManager
@@ -68,5 +69,10 @@ object ApiClient {
     fun authApi(): AuthApi {
         check(initialized) { "ApiClient.init(context) debe ejecutarse antes de usar ApiClient." }
         return retrofit.create(AuthApi::class.java)
+    }
+
+    fun propertyApi(): PropertyApi {
+        check(initialized) { "ApiClient.init(context) debe ejecutarse antes de usar ApiClient." }
+        return retrofit.create(PropertyApi::class.java)
     }
 }

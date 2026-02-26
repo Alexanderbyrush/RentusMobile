@@ -40,8 +40,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,6 +58,8 @@ import com.example.rentusmobile.R
 import com.example.rentusmobile.presentation.components.AnimatedHeading
 import com.example.rentusmobile.presentation.components.AppActionButton
 import com.example.rentusmobile.presentation.components.HomeNavbar
+import com.example.rentusmobile.utils.Resource
+import com.example.rentusmobile.viewModel.PropertyViewModel
 
 private data class DemoProperty(
     val title: String,
@@ -81,14 +84,27 @@ fun HomeScreen(
     onNavigateMyRequests: () -> Unit = {},
     onNavigateRequests: () -> Unit = {},
     onNavigateMyReports: () -> Unit = {},
-    onNavigateSettings: () -> Unit = {}
+    onNavigateSettings: () -> Unit = {},
+    viewModel: PropertyViewModel = viewModel()
 ) {
-    val properties = remember {
-        listOf(
-            DemoProperty("Penthouse Sky Lounge", "Bogotá", "$6.200.000", "220m²", "4", "4", "Disponible"),
-            DemoProperty("Casa Forest Minimal", "Medellín", "$4.700.000", "260m²", "4", "4", "Top"),
-            DemoProperty("Loft Neon District", "Cali", "$3.100.000", "92m²", "2", "2", "Nuevo")
-        )
+    LaunchedEffect(Unit) {
+        viewModel.loadProperties()
+    }
+
+    val properties = when (val state = viewModel.propertiesState) {
+        is Resource.Success -> state.data.take(6).map {
+            DemoProperty(
+                title = it.title,
+                city = it.city ?: "Sin ciudad",
+                price = "$${(it.monthlyPrice ?: 0.0).toInt()}",
+                area = "${(it.areaM2 ?: 0.0).toInt()}m²",
+                bedrooms = "${it.numBedrooms ?: 0}",
+                bathrooms = "${it.numBathrooms ?: 0}",
+                status = it.status ?: "Disponible"
+            )
+        }
+
+        else -> emptyList()
     }
 
     Box(
@@ -106,7 +122,9 @@ fun HomeScreen(
         ) {
             HeroSection()
             SearchSection()
-            PropertiesSection(properties)
+            if (properties.isNotEmpty()) {
+                PropertiesSection(properties)
+            }
             CtaSection(onNavigateProperties)
             Spacer(modifier = Modifier.height(24.dp))
         }
