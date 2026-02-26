@@ -6,9 +6,10 @@ import com.example.rentusmobile.utils.Resource
 
 class PropertyRepository {
 
-    private val api = ApiClient.propertyApi()
-
     suspend fun getProperties(city: String? = null): Resource<List<Property>> {
+        val api = runCatching { ApiClient.propertyApi() }
+            .getOrElse { return Resource.Error("Cliente API no inicializado: ${it.message}") }
+
         return runCatching {
             api.getProperties(city = city)
         }.fold(
@@ -26,6 +27,9 @@ class PropertyRepository {
     }
 
     suspend fun getPropertyById(id: Int): Resource<Property> {
+        val api = runCatching { ApiClient.propertyApi() }
+            .getOrElse { return Resource.Error("Cliente API no inicializado: ${it.message}") }
+
         return runCatching {
             api.getPropertyById(id)
         }.fold(
