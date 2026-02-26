@@ -40,8 +40,12 @@ sealed class Screen(val route: String) {
     data object MyReports : Screen("my_reports")
     data object Settings : Screen("settings")
     data object PropertyCreate : Screen("property_create")
-    data object PropertyDetail : Screen("property_detail")
-    data object PropertyEdit : Screen("property_edit")
+    data object PropertyDetail : Screen("property_detail/{propertyId}") {
+        fun createRoute(propertyId: Int) = "property_detail/$propertyId"
+    }
+    data object PropertyEdit : Screen("property_edit/{propertyId}") {
+        fun createRoute(propertyId: Int) = "property_edit/$propertyId"
+    }
 }
 
 @Composable
@@ -142,8 +146,8 @@ fun NavGraph(
                 onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
                 onNavigateSettings = { navigateToRootTab(Screen.Settings.route) },
                 onNavigatePropertyCreate = { navigateSingleTop(Screen.PropertyCreate.route) },
-                onNavigatePropertyDetail = { navigateSingleTop(Screen.PropertyDetail.route) },
-                onNavigatePropertyEdit = { navigateSingleTop(Screen.PropertyEdit.route) }
+                onNavigatePropertyDetail = { id -> navigateSingleTop(Screen.PropertyDetail.createRoute(id)) },
+                onNavigatePropertyEdit = { id -> navigateSingleTop(Screen.PropertyEdit.createRoute(id)) }
             )
         }
 
@@ -318,8 +322,10 @@ fun NavGraph(
             )
         }
 
-        composable(Screen.PropertyDetail.route) {
+        composable(Screen.PropertyDetail.route) { backStackEntry ->
+            val propertyId = backStackEntry.arguments?.getString("propertyId")?.toIntOrNull() ?: 0
             PropertyDetailScreen(
+                propertyId = propertyId,
                 onNavigateHome = { navigateToRootTab(Screen.Home.route) },
                 onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
                 onNavigateAbout = { navigateToRootTab(Screen.About.route) },
@@ -332,12 +338,14 @@ fun NavGraph(
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
                 onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
                 onNavigateSettings = { navigateToRootTab(Screen.Settings.route) },
-                onNavigateEdit = { navigateSingleTop(Screen.PropertyEdit.route) }
+                onNavigateEdit = { id -> navigateSingleTop(Screen.PropertyEdit.createRoute(id)) }
             )
         }
 
-        composable(Screen.PropertyEdit.route) {
+        composable(Screen.PropertyEdit.route) { backStackEntry ->
+            val propertyId = backStackEntry.arguments?.getString("propertyId")?.toIntOrNull() ?: 0
             PropertyEditScreen(
+                propertyId = propertyId,
                 onNavigateHome = { navigateToRootTab(Screen.Home.route) },
                 onNavigateProperties = { navigateToRootTab(Screen.Properties.route) },
                 onNavigateAbout = { navigateToRootTab(Screen.About.route) },
@@ -350,7 +358,7 @@ fun NavGraph(
                 onNavigateRequests = { navigateToRootTab(Screen.Requests.route) },
                 onNavigateMyReports = { navigateToRootTab(Screen.MyReports.route) },
                 onNavigateSettings = { navigateToRootTab(Screen.Settings.route) },
-                onBackToDetail = { navController.popBackStack() }
+                onBackToDetail = { navigateSingleTop(Screen.PropertyDetail.createRoute(propertyId)) }
             )
         }
 
