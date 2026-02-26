@@ -10,9 +10,9 @@ import com.example.rentusmobile.data.repository.PropertyRepository
 import com.example.rentusmobile.utils.Resource
 import kotlinx.coroutines.launch
 
-class PropertyViewModel(
+class PropertyViewModel : ViewModel() {
+
     private val repository: PropertyRepository = PropertyRepository()
-) : ViewModel() {
 
     var propertiesState by mutableStateOf<Resource<List<Property>>>(Resource.Loading)
         private set
