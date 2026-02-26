@@ -169,7 +169,7 @@ fun PropertiesScreen(
         when (uiState) {
             PropertiesUiState.Loading -> LoadingState()
             PropertiesUiState.Error -> CenterInfo("No pudimos cargar las propiedades.") {
-                AppActionButton(text = "Reintentar", onClick = {}, modifier = Modifier.fillMaxWidth(0.52f))
+                AppActionButton(text = "Reintentar", onClick = { viewModel.loadProperties() }, modifier = Modifier.fillMaxWidth(0.52f))
             }
             PropertiesUiState.Empty -> CenterInfo("No encontramos resultados para tu búsqueda.") {
                 Icon(Icons.Default.HourglassBottom, contentDescription = null, tint = Color(0xFFDA9C5F), modifier = Modifier.size(30.dp))

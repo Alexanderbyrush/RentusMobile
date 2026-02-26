@@ -18,7 +18,7 @@ data class LoginState(
     val isPasswordVisible: Boolean = false
 ) {
     val isFormValid: Boolean
-        get() = email.isNotBlank() && password.length >= 6 && validationErrors.isEmpty()
+        get() = true
 }
 
 class LoginViewModel(
@@ -29,12 +29,10 @@ class LoginViewModel(
 
     fun onEmailChange(value: String) {
         state = state.copy(email = value)
-        validateFields()
     }
 
     fun onPasswordChange(value: String) {
         state = state.copy(password = value)
-        validateFields()
     }
 
     fun onTogglePasswordVisibility() {
@@ -46,11 +44,8 @@ class LoginViewModel(
     }
 
     fun onLoginClick(onSuccess: () -> Unit = {}) {
-        val errors = validateFields()
-        if (errors.isNotEmpty()) return
-
         viewModelScope.launch {
-            state = state.copy(isLoading = true, errorMessage = null)
+            state = state.copy(isLoading = true, errorMessage = null, validationErrors = emptyMap())
             delay(350)
             onSuccess()
             state = state.copy(isLoading = false)
@@ -60,22 +55,4 @@ class LoginViewModel(
     fun onForgotPasswordClick() = Unit
 
     fun onGoogleLoginClick() = Unit
-
-    private fun validateFields(): Map<String, String> {
-        val errors = mutableMapOf<String, String>()
-        val emailRegex = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})".toRegex()
-
-        if (state.email.isBlank()) {
-            errors["email"] = "El email es obligatorio"
-        } else if (!emailRegex.matches(state.email)) {
-            errors["email"] = "Formato de email inválido"
-        }
-
-        if (state.password.length < 6) {
-            errors["password"] = "La contraseña debe tener mínimo 6 caracteres"
-        }
-
-        state = state.copy(validationErrors = errors, errorMessage = null)
-        return errors
-    }
 }
