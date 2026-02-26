@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentusmobile.data.repository.AuthRepository
 import kotlinx.coroutines.launch
 
 data class LoginState(
@@ -21,9 +20,7 @@ data class LoginState(
         get() = email.isNotBlank() && password.length >= 6 && validationErrors.isEmpty()
 }
 
-class LoginViewModel(
-    private val authRepository: AuthRepository = AuthRepository()
-) : ViewModel() {
+class LoginViewModel : ViewModel() {
 
     var state by mutableStateOf(LoginState())
         private set
@@ -47,18 +44,11 @@ class LoginViewModel(
     }
 
     fun onLoginClick(onSuccess: () -> Unit = {}) {
-        val errors = validateFields()
-        if (errors.isNotEmpty()) return
-
         viewModelScope.launch {
             state = state.copy(isLoading = true, errorMessage = null)
-            val result = authRepository.login(state.email, state.password)
-            state = if (result.isSuccess) {
-                onSuccess()
-                state.copy(isLoading = false)
-            } else {
-                state.copy(isLoading = false, errorMessage = "No se pudo iniciar sesión. Intenta nuevamente.")
-            }
+            kotlinx.coroutines.delay(400)
+            state = state.copy(isLoading = false)
+            onSuccess()
         }
     }
 
